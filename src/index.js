@@ -18,6 +18,15 @@ export function mutCreator(context) {
   };
 }
 
+export function toggleCreator(context) {
+  return property => e => {
+    const value = digIntoState(property, context.state);
+    updateNestedStateForProperty(property, !value, context);
+
+    return value;
+  }
+}
+
 // -----------------------
 // various helpers
 // -----------------------
@@ -27,6 +36,19 @@ export function findValue(e) {
   if (e.value) return e.value;
 
   return e;
+}
+
+// given a string.object.notation, this will
+// crawl the state object tree, and return the value of
+// the right most property.
+function digIntoState(property, state) {
+  const properties = property.split('.');
+  const firstProperty = properties[0];
+  const others = properties.slice(1)[0];
+
+  if (others === undefined) return state[firstProperty];
+
+  return digIntoState(others, state[firstProperty]);
 }
 
 // expands a property path string to an object, and

@@ -1,0 +1,21 @@
+sudo: required
+
+language: node_js
+node_js:
+  - stable
+
+services:
+  - docker
+
+env:
+  CODECLIMATE_COVERAGE_TOKEN=590b168c46f556598f69b56d0da17e71cff7d4b6e8ef909a8bc4373f494f9c87
+
+before_script:
+  - npm install -g yarn
+  - yarn install
+
+script:
+  - npm test
+
+notifications:
+  email: false

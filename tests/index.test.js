@@ -5,7 +5,7 @@ import ReactTestRenderer from 'react-test-renderer';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
-import { mutCreator, findValue } from '../src/index.js';
+import { mutCreator, toggleCreator, findValue } from '../src/index.js';
 
 // fixtures...
 class UsingMut extends Component {
@@ -13,6 +13,7 @@ class UsingMut extends Component {
     super(props);
 
     this.state = {
+      boolName: false,
       rootKey: 'rootValue',
       object: {
         nestedObject: {
@@ -21,16 +22,18 @@ class UsingMut extends Component {
       }
     }
     this.mut = mutCreator(this);
+    this.toggle = toggleCreator(this);
   }
 
   render() {
     const { rootKey, object: { nestedObject: { deepKey } } } = this.state;
-    const { mut } = this;
+    const { mut, toggle } = this;
 
     return (
       <div>
         <span className='root'>{rootKey}</span>
         <span className='deep'>{deepKey}</span>
+        <button onClick={toggle('boolName')}>btn</button>
         <input
           id='root'
           type='text'
@@ -76,6 +79,27 @@ describe('mutCreator', () => {
 
       expect(state.object.nestedObject.deepKey).toEqual('changed');
       expect(state.rootKey).toEqual('rootValue');
+    });
+  });
+});
+
+describe('toggleCreator', () => {
+  describe('with a React Component', () => {
+    it('toggles the value', () => {
+      const wrapper = shallow(<UsingMut />);
+      const btn = wrapper.find('button');
+
+      expect(wrapper.state().boolName).toEqual(false);
+
+      btn.simulate('click');
+      wrapper.update();
+
+      expect(wrapper.state().boolName).toEqual(true);
+
+      btn.simulate('click');
+      wrapper.update();
+
+      expect(wrapper.state().boolName).toEqual(false);
     });
   });
 });
