@@ -1,4 +1,5 @@
 # React State Helpers
+[![npm version](https://badge.fury.io/js/react-state-helpers.svg)](https://badge.fury.io/js/react-state-helpers)
 [![Build Status](https://travis-ci.org/NullVoxPopuli/react-state-helpers.svg?branch=master)](https://travis-ci.org/NullVoxPopuli/react-state-helpers)
 [![Code Climate](https://codeclimate.com/github/NullVoxPopuli/react-state-helpers/badges/gpa.svg)](https://codeclimate.com/github/NullVoxPopuli/react-state-helpers)
 
