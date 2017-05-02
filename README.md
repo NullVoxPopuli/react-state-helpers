@@ -1,4 +1,6 @@
 # React State Helpers
+[![Build Status](https://travis-ci.org/NullVoxPopuli/react-state-helpers.svg?branch=master)](https://travis-ci.org/NullVoxPopuli/react-state-helpers)
+[![Code Climate](https://codeclimate.com/github/NullVoxPopuli/react-state-helpers/badges/gpa.svg)](https://codeclimate.com/github/NullVoxPopuli/react-state-helpers)
 
 ## Installation
 
@@ -87,8 +89,8 @@ import { mutCreator } from 'react-state-helpers';
 // ... in constructor
 this.mut = mutCreator(this);
 // ... in render
-const { 
-  mut, 
+const {
+  mut,
   state: { firstName, lastName }
 } = this;
 // ... still in render
