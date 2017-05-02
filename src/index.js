@@ -20,8 +20,8 @@ export function mutCreator(context) {
 
 export function toggleCreator(context) {
   return property => e => {
-    const value = digIntoState(property, context.state);
-    updateNestedStateForProperty(property, !value, context);
+    const value = !digIntoState(property, context.state);
+    updateNestedStateForProperty(property, value, context);
 
     return value;
   }
