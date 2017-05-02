@@ -135,6 +135,7 @@ describe('toggleCreator', () => {
       const result = toggle('val')();
 
       expect(result).toEqual(true);
+      expect(fake.state.val).toEqual(true);
     });
 
     it('returns false when the value is true', () => {
@@ -146,6 +147,7 @@ describe('toggleCreator', () => {
       const result = toggle('val')();
 
       expect(result).toEqual(false);
+      expect(fake.state.val).toEqual(false);
     });
   });
 });
