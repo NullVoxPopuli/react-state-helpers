@@ -70,5 +70,5 @@ Most components don't need to use redux-forms, as many inputs don't need to chan
 ### After
 
 ```js
-<input value={firstName} onChange={mut('firstName'), type='text'} />
+<input value={firstName} onChange={mut('firstName')} type='text' />
 ```
