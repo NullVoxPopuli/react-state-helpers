@@ -64,11 +64,38 @@ Most components don't need to use redux-forms, as many inputs don't need to chan
 ### Before
 
 ```js
-<Field name='firstName' component='input' type='text' />
+import { Field } from 'redux-form';
+// ... in render
+<Field
+  name='firstName'
+  component='input'
+  type='text' />
+<Field
+  name='lastName'
+  component='input'
+  type='text' />
+// ...
+export default reduxForm({ form: 'formname' })(MyComponent);
 ```
 
 ### After
 
+no reliance on redux!
+
 ```js
-<input value={firstName} onChange={mut('firstName')} type='text' />
+import { mutCreator } from 'react-state-helpers';
+// ... in constructor
+this.mut = mutCreator(this);
+// ... in render
+const { mut, state } = this
+const { firstName, lastName } = state;
+// ... still in render
+<input
+  value={firstName}
+  onChange={mut('firstName')}
+  type='text' />
+<input
+  value={lasteName}
+  onChange={mut('lasteName')}
+  type='text' />
 ```
