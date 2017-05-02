@@ -18,6 +18,15 @@ export function mutCreator(context) {
   };
 }
 
+export function toggleCreator(context) {
+  return property => e => {
+    const value = findValue(e);
+    updateNestedStateForProperty(property, !value, context);
+
+    return value;
+  }
+}
+
 // -----------------------
 // various helpers
 // -----------------------
