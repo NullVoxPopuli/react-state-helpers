@@ -87,8 +87,10 @@ import { mutCreator } from 'react-state-helpers';
 // ... in constructor
 this.mut = mutCreator(this);
 // ... in render
-const { mut, state } = this
-const { firstName, lastName } = state;
+const { 
+  mut, 
+  state: { firstName, lastName }
+} = this;
 // ... still in render
 <input
   value={firstName}
