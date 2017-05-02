@@ -4,6 +4,8 @@ import ReactTestRenderer from 'react-test-renderer';
 
 import { shallow } from 'enzyme';
 import expect from 'expect';
+import merge from 'deepmerge';
+
 
 import { mutCreator, toggleCreator, findValue } from '../src/index.js';
 
@@ -46,6 +48,16 @@ class UsingMut extends Component {
           onChange={mut('object.nestedObject.deepKey')} />
       </div>
     );
+  }
+}
+
+class ComponentStub {
+  constructor(initialState = {}) {
+    this.state = initialState || {};
+  }
+
+  setState(obj) {
+    this.state = merge(this.state, obj);
   }
 }
 
@@ -100,6 +112,40 @@ describe('toggleCreator', () => {
       wrapper.update();
 
       expect(wrapper.state().boolName).toEqual(false);
+    });
+  });
+
+  describe('the returned event handling function', () => {
+    it('returns true when the value is undefined', () => {
+      const fake = new ComponentStub();
+      const toggle = toggleCreator(fake);
+      const result = toggle('val')();
+
+      expect(result).toEqual(true);
+    });
+
+    it('returns true when the value is false', () => {
+      const fake = new ComponentStub();
+      const toggle = toggleCreator(fake);
+
+      fake.setState({ val: false });
+
+      expect(fake.state.val).toEqual(false);
+
+      const result = toggle('val')();
+
+      expect(result).toEqual(true);
+    });
+
+    it('returns false when the value is true', () => {
+      const fake = new ComponentStub({val: true});
+      const toggle = toggleCreator(fake);
+
+      expect(fake.state.val).toEqual(true);
+
+      const result = toggle('val')();
+
+      expect(result).toEqual(false);
     });
   });
 });
