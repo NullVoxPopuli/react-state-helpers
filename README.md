@@ -8,7 +8,7 @@
 yarn add react-state-helpers
 ```
 
-## Usage
+## Mut Usage
 
 ```js
 import React, { Component } from 'react';
@@ -25,9 +25,10 @@ export default class Example extends Component {
   }
 
   render() {
-    const { someKey } = this.state;
-
-    const mut = this.mut;
+    const {
+      mut,
+      state: { someKey }
+    } = this;
 
     return (
       <input
@@ -38,6 +39,42 @@ export default class Example extends Component {
   }
 }
 ```
+
+## Toggle Usage
+
+```js
+import React, { Component } from 'react';
+import { toggleCreator } from 'react-state-helpers';
+import { Modal, Button } from 'reactstrap'; // external package
+
+export default class Example extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { showModal: false };
+
+    // need to create the helper;
+    this.toggle = toggleCreator(this);
+  }
+
+  render() {
+    const {
+      toggle,
+      state: { showModal }
+    } = this;
+
+    return (
+      <div>
+        <Button onClick={toggle('showModal')}>Open</Button>
+        <Modal isOpen={showModal}>
+          <Button onClick={toggle('showModal')}>{'Cancel'}</Button>
+        </Modal>
+      </div>
+    );
+  }
+}
+```
+
 
 ## Available Functions
 
