@@ -63,8 +63,12 @@ Most components don't need to use redux-forms, as many inputs don't need to chan
 
 ### Before
 
-  todo
+```js
+<Field name='firstName' component='input' type='text' />
+```
 
 ### After
 
-  todo
+```js
+<input value={firstName} onChange={mut('firstName'), type='text'} />
+```
