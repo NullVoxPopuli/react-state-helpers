@@ -19,7 +19,7 @@ export default class Example extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { someKey: '' };
+    this.state = { someKey: '', someNumber: 2 };
 
     // need to create the helper;
     this.mut = mutCreator(this);
@@ -28,7 +28,7 @@ export default class Example extends Component {
   render() {
     const {
       mut,
-      state: { someKey }
+      state: { someKey, someNumber }
     } = this;
 
     return (
@@ -36,6 +36,10 @@ export default class Example extends Component {
         type='text'
         value={someKey}
         onChange={mut('someKey')} />
+      <input
+        type='number'
+        value={someNumber}
+        onChange={mut('someNumber', parseInt)}/>
     );
   }
 }
