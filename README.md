@@ -39,7 +39,7 @@ export default class Example extends Component {
       <input
         type='number'
         value={someNumber}
-        onChange={mut('someNumber', parseInt)}/>
+        onChange={mut('someNumber', parseInt)} />
     );
   }
 }
