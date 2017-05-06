@@ -64,6 +64,35 @@ class ComponentStub {
 
 // actual tests...
 describe('mutCreator', () => {
+  describe('it transforms', () => {
+    it('takes a function', () => {
+      const fake = new ComponentStub();
+      const mut = mutCreator(fake);
+      const result = mut('two', parseInt)('2');
+
+      expect(typeof result).toEqual('number');
+      expect(result).toEqual(2);
+    });
+
+    it('takes a function, and returns a float', () => {
+      const fake = new ComponentStub();
+      const mut = mutCreator(fake);
+      const result = mut('two', parseFloat)('2.2');
+
+      expect(typeof result).toEqual('number');
+      expect(result).toEqual(2.2);
+    });
+
+    it('takes an anonymous function', () => {
+      const fake = new ComponentStub();
+      const mut = mutCreator(fake);
+      const result = mut('two', value => parseInt(value, 10))('2');
+
+      expect(typeof result).toEqual('number');
+      expect(result).toEqual(2);
+    });
+  });
+
   describe('with a React Component', () => {
     it('renders the default state', () => {
       const wrapper = shallow(<UsingMut />);

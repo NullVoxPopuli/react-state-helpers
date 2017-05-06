@@ -9,9 +9,16 @@
 //     const mut = this.mut;
 //     ...
 //     onChange={mut('property')}
+//
+//  also:
+//     onChange={mut('property', parseFloat)}
 export function mutCreator(context) {
-  return property => e => {
-    const value = findValue(e);
+  // mut => the function called by whatever event
+  return (property, transform) => e => {
+    const isFunction = typeof transform === 'function';
+    const passedValue = findValue(e);
+    const value = isFunction ? transform(passedValue) : passedValue;
+
     updateNestedStateForProperty(property, value, context);
 
     return value;
