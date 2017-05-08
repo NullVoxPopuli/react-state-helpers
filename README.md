@@ -89,7 +89,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { mutCreator } from 'react-state-helpers';
+import { withValue } from 'react-state-helpers';
 
 import * as actions from 'js/actions';
 
@@ -97,25 +97,15 @@ class Example extends Component {
   static propTypes = {
     someKey: PropTypes.string
   }
-  
-  constructor(props) {
-    super(props);
-
-    // need to create the helper;
-    this.mut = mutCreator(this);
-  }
 
   render() {
-    const {
-      mut,
-      props: { someKey, setSomeKey }
-    } = this;
+    const { someKey, setSomeKey } = this.props;
 
     return (
       <input
         type='text'
         value={someKey}
-        onChange={mut('_someKey-NotUsed', setSomeKey)} />
+        onChange={withValue(setSomeKey)} />
     );
   }
 }

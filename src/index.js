@@ -34,6 +34,16 @@ export function toggleCreator(context) {
   }
 }
 
+export function withValue(func) {
+  return e => {
+    const value = findValue(e);
+
+    func(value);
+
+    return value;
+  }
+}
+
 // -----------------------
 // various helpers
 // -----------------------
