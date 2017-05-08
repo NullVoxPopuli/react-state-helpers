@@ -80,6 +80,55 @@ export default class Example extends Component {
 }
 ```
 
+## Shorthand Redux
+
+With using redux as the source of data, the first paramater of `mut` becomes irrelevant.
+
+```js
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { mutCreator } from 'react-state-helpers';
+
+import * as actions from 'js/actions';
+
+class Example extends Component {
+  static propTypes = {
+    someKey: PropTypes.string
+  }
+  
+  constructor(props) {
+    super(props);
+
+    // need to create the helper;
+    this.mut = mutCreator(this);
+  }
+
+  render() {
+    const {
+      mut,
+      props: { someKey, setSomeKey }
+    } = this;
+
+    return (
+      <input
+        type='text'
+        value={someKey}
+        onChange={mut('_someKey-NotUsed', setSomeKey)} />
+    );
+  }
+}
+
+export default connect(
+  state => ({
+    someKey: state.somewhere.someKey
+  }),
+  dispatch => ({
+    setSomeKey: bindActionCreators(actions.somewhere.setSomeKey, dispatch)
+  })
+)(Example)
+```
 
 ## Available Functions
 
@@ -96,10 +145,10 @@ export default class Example extends Component {
   // in render...
   <input value={someKey} onChange={handleChange} />
 ```
-
  - mutCreator
    - creates a helper that provides a short-hand for setting a state value.
-
+ - toggleCreator
+   - creates a helper that will set a value in the state to its inverse.
 
 ## Want to stop using redux-forms?
 
