@@ -38,9 +38,7 @@ export function withValue(func) {
   return e => {
     const value = findValue(e);
 
-    func(value);
-
-    return value;
+    return func(value);
   }
 }
 

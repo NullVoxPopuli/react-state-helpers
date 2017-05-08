@@ -7,7 +7,10 @@ import expect from 'expect';
 import merge from 'deepmerge';
 
 
-import { mutCreator, toggleCreator, findValue } from '../src/index.js';
+import {
+  mutCreator, toggleCreator,
+  findValue, withValue
+} from '../src/index.js';
 
 // fixtures...
 class UsingMut extends Component {
@@ -63,6 +66,14 @@ class ComponentStub {
 
 
 // actual tests...
+describe('withValue', () => {
+  it('takes a function', () => {
+    const result = withValue(val => val * 2)({ target: { value: 4 }})
+
+    expect(result).toEqual(8);
+  });
+});
+
 describe('mutCreator', () => {
   describe('it transforms', () => {
     it('takes a function', () => {
