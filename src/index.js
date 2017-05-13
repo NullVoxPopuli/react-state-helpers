@@ -34,6 +34,26 @@ export function toggleCreator(context) {
   }
 }
 
+export function handleSumbit(func){
+  return (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    let values = {};
+
+    let children = [];
+
+    children.push(form.querySelectorAll('input, select, textarea'));
+
+    for(let element of children[0]){
+
+      values = { ...values, [element.name]: element.value };
+    }
+
+    func(values);
+  }
+}
+
 export function withValue(func) {
   return e => {
     const value = findValue(e);
