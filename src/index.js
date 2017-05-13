@@ -43,11 +43,25 @@ export function handleSumbit(func){
 
     let children = [];
 
-    children.push(form.querySelectorAll('input, select, textarea'));
+    children.push(form.elements);
 
     for(let element of children[0]){
+      // Values will look like objectName: value
 
-      values = { ...values, [element.name]: element.value };
+      switch(element.type){
+        case 'checkbox':
+          values = { ...values, [element.name]: element.checked };
+          break;
+        // Radio buttons return a RadioNodeList, key is the name of the radios
+        case 'radio': {
+          if(element.checked){
+            values = { ...values, [element.name]: element.value };
+          }
+          break;
+        }
+        default:
+          values = { ...values, [element.name]: element.value };
+      }
     }
 
     func(values);

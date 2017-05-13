@@ -80,14 +80,22 @@ class FormComponent extends Component{
   render(){
     return(
       <form onSubmit={handleSumbit(Actions.submit)}>
-        <input name='testInput' type='text' defaultValue='value' />
+        <input id='testInput' name='testInput' type='text' defaultValue='value' />
         <div>
-          <input name='nestedInput' type='text' defaultValue='nestedValue' />
+          <input id='nestedInput' name='nestedInput' type='text' defaultValue='nestedValue' />
         </div>
-        <select name='testSelect'>
+        <select id='testSelect' name='testSelect'>
           <option value='test1'>Test 1</option>
+          <option value='test2'>Test 2</option>
+          <option value='test3'>Test 3</option>
         </select>
-        <textarea name='testTextArea' rows='4' cols='50' defaultValue='Test' />
+        <textarea id='testTextArea' name='testTextArea' rows='4' cols='50' defaultValue='Test' />
+        <input id='testCheckBox' name='testCheckBox' type='checkbox' defaultChecked />
+        <div>
+          <input name='testRadio' type='radio' value='test1' />
+          <input id='testRadio1' name='testRadio' type='radio' value='test2' defaultChecked />
+          <input id='testRadio2' name='testRadio' type='radio' value='test3' />
+        </div>
         <button type='sumbit'>Submit</button>
       </form>
     );
@@ -223,36 +231,109 @@ describe('toggleCreator', () => {
 });
 
 describe('handleSumbit', () => {
-  describe('with React Component', () => {
+  describe('default form values', () => {
 
     let wrapper;
     let submit;
+    let submitArgs;
 
     beforeEach(() => {
       wrapper = mount(<FormComponent />);
       submit = expect.spyOn(Actions, 'submit');
 
       wrapper.find('button').get(0).click();
+
+      submitArgs = Actions.submit.calls[0].arguments[0];
     });
 
     afterEach(() => {
       expect.restoreSpies();
+      submit.reset();
     })
 
-    it('returns a value for an input', () => {
-      expect(Actions.submit.calls[0].arguments[0].testInput).toEqual('value');
+    it('returns the correct value for an input', () => {
+      expect(submitArgs.testInput).toEqual('value');
     });
 
-    it('returns a value for a nested input', () => {
-      expect(Actions.submit.calls[0].arguments[0].nestedInput).toEqual('nestedValue');
+    it('returns the correct value for a nested input', () => {
+      expect(submitArgs.nestedInput).toEqual('nestedValue');
     });
 
-    it('returns a value for a select', () => {
-      expect(Actions.submit.calls[0].arguments[0].testSelect).toEqual('test1');
+    it('returns the correct value for a select', () => {
+      expect(submitArgs.testSelect).toEqual('test1');
     });
 
-    it('returns a value for textarea', () => {
-      expect(Actions.submit.calls[0].arguments[0].testTextArea).toEqual('Test');
+    it('returns the correct value for textarea', () => {
+      expect(submitArgs.testTextArea).toEqual('Test');
     });
-  })
+
+    it('returns the correct value for checkbox', () => {
+      expect(submitArgs.testCheckBox).toEqual(true);
+    });
+
+    it('returns the correct value for a radio group', () => {
+      expect(submitArgs.testRadio).toEqual('test2');
+    });
+  });
+
+  describe('with mutated values', () => {
+
+    let wrapper;
+    let submit;
+    let submitArgs;
+
+    // For the following tests:
+    //  I've found that element.node.value = 'mut'; is a good universal way of
+    //  programatically changing element values -- simulate doesn't work in some
+    //  cases (namely TextArea).
+
+
+    beforeEach(() => {
+      wrapper = mount(<FormComponent />);
+      submit = expect.spyOn(Actions, 'submit');
+
+      wrapper.find('#testInput').node.value = 'ChangedTestInput';
+      wrapper.find('#nestedInput').node.value = 'ChangedNestedInput';
+      wrapper.find('#testSelect').node.value = 'test2';
+      wrapper.find('#testTextArea').node.value='MutatedTest';
+      wrapper.find('#testCheckBox').node.checked = false;
+      wrapper.find('#testRadio1').node.checked = false;
+      wrapper.find('#testRadio2').node.checked = true;
+
+      wrapper.find('button').get(0).click();
+
+      submitArgs = Actions.submit.calls[0].arguments[0];
+
+    });
+
+    afterEach(() => {
+      expect.restoreSpies();
+      submit.reset();
+    })
+
+    it('returns the correct value for input', () => {
+      expect(submitArgs.testInput).toEqual('ChangedTestInput');
+    });
+
+    it('returns the correct value for nested input', () => {
+      expect(submitArgs.nestedInput).toEqual('ChangedNestedInput');
+    });
+
+    it('returns the correct value for a mutated select', () => {
+      expect(submitArgs.testSelect).toEqual('test2');
+    });
+    it('returns the correct value for mutated textarea', () => {
+      expect(submitArgs.testTextArea).toEqual('MutatedTest');
+    });
+
+    it('returns the correct value for mutated checkbox', () => {
+      expect(submitArgs.testCheckBox).toEqual(false);
+    });
+
+    it('returns the correct value for a mutated radio group', () => {
+      expect(submitArgs.testRadio).toEqual('test3');
+    });
+
+  });
+
 });

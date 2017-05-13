@@ -154,7 +154,7 @@ this.submit = (values) => {
 const { submit } = this;
 
 return(
-  <form onSubmit={submit}>
+  <form onSubmit={handleSumbit(submit)}>
     <input name='username' type='text' />
     <input name='password' type='password' />
     <button type='submit'>Login</button>
