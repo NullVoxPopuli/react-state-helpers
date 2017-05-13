@@ -52,7 +52,7 @@ export function handleSumbit(func){
         case 'checkbox':
           values = { ...values, [element.name]: element.checked };
           break;
-        // Radio buttons return a RadioNodeList, key is the name of the radios
+        // RadioNodeList doesn't work with every browser, check for checked instead.
         case 'radio': {
           if(element.checked){
             values = { ...values, [element.name]: element.value };
