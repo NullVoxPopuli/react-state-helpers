@@ -1,16 +1,18 @@
 import 'babel-polyfill';
+import 'jsdom-global/register';
 import React, { Component } from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import expect from 'expect';
 import merge from 'deepmerge';
 
 
 import {
   mutCreator, toggleCreator,
-  findValue, withValue
+  findValue, withValue, handleSumbit
 } from '../src/index.js';
+
 
 // fixtures...
 class UsingMut extends Component {
@@ -61,6 +63,34 @@ class ComponentStub {
 
   setState(obj) {
     this.state = merge(this.state, obj);
+  }
+}
+
+const Actions = {
+  submit: expect.createSpy(),
+}
+
+class FormComponent extends Component{
+  constructor(props){
+    super(props);
+
+    this.state = {};
+  }
+
+  render(){
+    return(
+      <form onSubmit={handleSumbit(Actions.submit)}>
+        <input name='testInput' type='text' defaultValue='value' />
+        <div>
+          <input name='nestedInput' type='text' defaultValue='nestedValue' />
+        </div>
+        <select name='testSelect'>
+          <option value='test1'>Test 1</option>
+        </select>
+        <textarea name='testTextArea' rows='4' cols='50' defaultValue='Test' />
+        <button type='sumbit'>Submit</button>
+      </form>
+    );
   }
 }
 
@@ -190,4 +220,39 @@ describe('toggleCreator', () => {
       expect(fake.state.val).toEqual(false);
     });
   });
+});
+
+describe('handleSumbit', () => {
+  describe('with React Component', () => {
+
+    let wrapper;
+    let submit;
+
+    beforeEach(() => {
+      wrapper = mount(<FormComponent />);
+      submit = expect.spyOn(Actions, 'submit');
+
+      wrapper.find('button').get(0).click();
+    });
+
+    afterEach(() => {
+      expect.restoreSpies();
+    })
+
+    it('returns a value for an input', () => {
+      expect(Actions.submit.calls[0].arguments[0].testInput).toEqual('value');
+    });
+
+    it('returns a value for a nested input', () => {
+      expect(Actions.submit.calls[0].arguments[0].nestedInput).toEqual('nestedValue');
+    });
+
+    it('returns a value for a select', () => {
+      expect(Actions.submit.calls[0].arguments[0].testSelect).toEqual('test1');
+    });
+
+    it('returns a value for textarea', () => {
+      expect(Actions.submit.calls[0].arguments[0].testTextArea).toEqual('Test');
+    });
+  })
 });
