@@ -139,6 +139,28 @@ export default connect(
    - creates a helper that provides a short-hand for setting a state value.
  - toggleCreator
    - creates a helper that will set a value in the state to its inverse.
+ - handleSumbit
+   - creates a helper that will pass in all form values to a callback function.
+
+```js
+// constructor
+const { actions, dispatch } = this.props;
+this.submit = (values) => {
+  dispatch(actions.login(values.username, values.password));
+}
+```
+```js
+// in render method
+const { submit } = this;
+
+return(
+  <form onSubmit={submit}>
+    <input name='username' type='text' />
+    <input name='password' type='password' />
+    <button type='submit'>Login</button>
+  </form>
+);
+```
 
 ## Want to stop using redux-forms?
 
