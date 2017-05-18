@@ -35,17 +35,13 @@ export function toggleCreator(context) {
 }
 
 export function handleSumbit(func){
-  return (e) => {
+  return e => {
     e.preventDefault();
 
     const form = e.target;
     let values = {};
 
-    let children = [];
-
-    children.push(form.elements);
-
-    for(let element of children[0]){
+    form.elements.forEach(element => {
       // Values will look like objectName: value
 
       switch(element.type){
@@ -54,7 +50,7 @@ export function handleSumbit(func){
           break;
         // RadioNodeList doesn't work with every browser, check for checked instead.
         case 'radio': {
-          if(element.checked){
+          if (element.checked) {
             values = { ...values, [element.name]: element.value };
           }
           break;
@@ -62,9 +58,9 @@ export function handleSumbit(func){
         default:
           values = { ...values, [element.name]: element.value };
       }
-    }
+    });
 
-    func(values);
+    return func(values);
   }
 }
 
