@@ -15,7 +15,13 @@
   },
   "bugs": "https://github.com/NullVoxPopuli/react-state-helpers/issues",
   "author": "NullVoxPopuli <LPSego3+dev@gmail.com>",
-  "contributors": [],
+  "contributors": [
+    {
+      "name": "Kalob Porter",
+      "email": "kalob@kalob.net",
+      "url": "https://kalob.net/"
+    }
+  ],
   "scripts": {
     "compile": "./node_modules/.bin/babel --presets es2015 --out-file index.js src/",
     "prepublish": "npm run compile",
