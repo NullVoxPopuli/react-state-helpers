@@ -120,6 +120,37 @@ export default connect(
 )(Example)
 ```
 
+## HandleSubmit Usage
+
+```js
+import React, { Component } from 'react';
+import { handleSubmit } from 'react-state-helpers';
+import * as actions from 'src/actions';
+
+class Example extends Component {
+  render() {
+    const { login } = this.props;
+
+    const submit = values => login(values.username, values.password);
+
+    return(
+      <form onSubmit={handleSumbit(submit)}>
+        <input name='username' type='text' />
+        <input name='password' type='password' />
+        <button type='submit'>Login</button>
+      </form>
+    );
+  }
+}
+
+export default connect(
+  state => ({}),
+  dispatch => ({
+    login() { dispatch(actions.login); }
+  })
+)(Example)
+```
+
 ## Available Functions
 
  - findValue
@@ -141,26 +172,6 @@ export default connect(
    - creates a helper that will set a value in the state to its inverse.
  - handleSumbit
    - creates a helper that will pass in all form values to a callback function.
-
-```js
-// constructor
-const { actions, dispatch } = this.props;
-this.submit = (values) => {
-  dispatch(actions.login(values.username, values.password));
-}
-```
-```js
-// in render method
-const { submit } = this;
-
-return(
-  <form onSubmit={handleSumbit(submit)}>
-    <input name='username' type='text' />
-    <input name='password' type='password' />
-    <button type='submit'>Login</button>
-  </form>
-);
-```
 
 ## Want to stop using redux-forms?
 
