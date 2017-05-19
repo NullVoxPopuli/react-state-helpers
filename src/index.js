@@ -26,12 +26,12 @@ export function mutCreator(context) {
 }
 
 export function toggleCreator(context) {
-  return property => e => {
+  return property => _event => {
     const value = !digIntoState(property, context.state);
     updateNestedStateForProperty(property, value, context);
 
     return value;
-  }
+  };
 }
 
 // NOTE: typeof form.elements === 'object'
@@ -48,7 +48,7 @@ export function toggleCreator(context) {
 // form.elements is built off the name attribute, so if an input
 // doesn't have a name attribute (like a submit input), it will
 // appear as "": "Submit Text"
-export function handleSumbit(func){
+export function handleSumbit(func) {
   return e => {
     e.preventDefault();
 
@@ -57,19 +57,21 @@ export function handleSumbit(func){
     const numElements = elements.length;
     let values = {};
 
-    for (let i = 0; i < numElements; i++) {
+    for (let i = 0; i < numElements; i += 1) {
       const input = elements[i];
-      const value = valueOfInput(input);
+      const isValueIgnored = (input.type === 'radio' && !input.checked);
 
       // radio buttons must have a value, and therefore we don't
       // care about them if they aren't checked.
-      if (input.type === 'radio' && !input.checked) continue;
+      if (!isValueIgnored) {
+        const value = valueOfInput(input);
 
-      values = { ...values, [input.name]: value }
+        values = { ...values, [input.name]: value };
+      }
     }
 
     return func(values);
-  }
+  };
 }
 
 export function withValue(func) {
@@ -77,7 +79,7 @@ export function withValue(func) {
     const value = findValue(e);
 
     return func(value);
-  }
+  };
 }
 
 // -----------------------
