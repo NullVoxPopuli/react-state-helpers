@@ -61,6 +61,8 @@ export function handleSumbit(func){
       const input = elements[i];
       const value = valueOfInput(input);
 
+      if (input.type === 'radio' && !input.checked) continue;
+
       values = { ...values, [input.name]: value }
     }
 
@@ -88,9 +90,10 @@ export function findValue(e) {
 }
 
 function valueOfInput(input) {
-  if (input.type == 'checkbox' && !input.value) return input.checked;
+  if (input.type === 'checkbox' && !input.value) return input.checked;
+  if (input.type === 'radio') return input.value;
 
-  return input.checked && input.value || input.value;
+  return input.value;
 }
 
 // given a string.object.notation, this will
