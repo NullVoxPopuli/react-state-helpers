@@ -34,31 +34,35 @@ export function toggleCreator(context) {
   }
 }
 
+// NOTE: typeof form.elements === 'object'
+//
+// form.elements is an object that acts like an array.
+// it has keys of 0..numberOfInputs in addition to key: value,
+// entries that match the input name attributes with their
+// corresponding value.
+//
+// form.elements.length returns the number of input elements
+// including select, radio, checkboxes, and submit inputs.
+//
+// something to keep in mind, is that the key-value part of
+// form.elements is built off the name attribute, so if an input
+// doesn't have a name attribute (like a submit input), it will
+// appear as "": "Submit Text"
 export function handleSumbit(func){
   return e => {
     e.preventDefault();
 
     const form = e.target;
+    const elements = form.elements;
+    const numElements = elements.length;
     let values = {};
 
-    form.elements.forEach(element => {
-      // Values will look like objectName: value
+    for (let i = 0; i < numElements; i++) {
+      const input = elements[i];
+      const value = valueOfInput(input);
 
-      switch(element.type){
-        case 'checkbox':
-          values = { ...values, [element.name]: element.checked };
-          break;
-        // RadioNodeList doesn't work with every browser, check for checked instead.
-        case 'radio': {
-          if (element.checked) {
-            values = { ...values, [element.name]: element.value };
-          }
-          break;
-        }
-        default:
-          values = { ...values, [element.name]: element.value };
-      }
-    });
+      values = { ...values, [input.name]: value }
+    }
 
     return func(values);
   }
@@ -81,6 +85,12 @@ export function findValue(e) {
   if (e.value) return e.value;
 
   return e;
+}
+
+function valueOfInput(input) {
+  if (input.type == 'checkbox' && !input.value) return input.checked;
+
+  return input.checked && input.value || input.value;
 }
 
 // given a string.object.notation, this will
