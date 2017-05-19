@@ -61,6 +61,8 @@ export function handleSumbit(func){
       const input = elements[i];
       const value = valueOfInput(input);
 
+      // radio buttons must have a value, and therefore we don't
+      // care about them if they aren't checked.
       if (input.type === 'radio' && !input.checked) continue;
 
       values = { ...values, [input.name]: value }
