@@ -4,4 +4,5 @@ export { mutCreator } from './mut';
 export { toggleCreator } from './toggle';
 export { handleSumbit } from './handleSubmit';
 
-export default from './state-wrapper';
+import { stateWrapper } from './state-wrapper';
+export default stateWrapper;

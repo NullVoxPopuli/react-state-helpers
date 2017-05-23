@@ -23,7 +23,7 @@
     }
   ],
   "scripts": {
-    "compile": "./node_modules/.bin/babel --presets es2015 --out-file index.js src/",
+    "compile": "./node_modules/.bin/babel --presets es2015,react --out-file index.js src/",
     "prepublish": "npm run compile",
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register tests/**/*.test.js"
   },

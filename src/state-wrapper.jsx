@@ -6,7 +6,9 @@ import { mutCreator } from './mut';
 import { toggleCreator } from './toggle';
 import { handleSumbit } from './handleSubmit';
 
-function stateWrapper(WrappedComponent) {
+// Higher-Order-Component for adding all the functionality of
+// react-state-helpers to a component
+export function stateWrapper(WrappedComponent) {
   return class extends Component {
     constructor(props) {
       super(props);
@@ -32,5 +34,3 @@ function stateWrapper(WrappedComponent) {
     }
   };
 }
-
-export default stateWrapper;
