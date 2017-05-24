@@ -10,22 +10,42 @@ class TestEverything extends Component {
 
     this.state = {
       mutValue: '',
-      toggleValue: false
+      toggleValue: false,
+      someWithValue: '',
+      mutTransformValue: ''
     }
   }
 
   render() {
     const {
-      state: { mutValue, toggleValue },
-      props: { mut, toggle, withValue, findValue, handleSumbit }
+      // state: { mutValue, toggleValue, someWithValue, mutTransformValue },
+      props: {
+        mut, toggle, withValue, findValue, handleSumbit,
+        values: { mutValue, toggleValue, someWithValue, mutTransformValue }
+      }
     } = this;
 
     return (
       <div>
-        <span dataMutTest>{mutValue}</span>
+        {/* toggle */}
         <span dataToggleTest>{toggleValue}</span>
         <button dataToggleButton onClick={toggle('toggleValue')}>toggle button</button>
+
+        {/* mut */}
+        <span dataMutTest>{mutValue}</span>
         <input dataMutInput type='text' value={mutValue} onChange={mut('mutValue')} />
+
+        {/* mut with transform */}
+        <span dataMutTransformTest>{mutTransformValue}</span>
+        <input dataMutTransformInput type='text'
+          value={mutTransformValue}
+          onChange={mut('mutTransformValue', parseInt)} />
+
+        {/* withValue */}
+        <span dataWithValueTest>{someWithValue}</span>
+        <input dataWithValueInput type='text'
+          value={someWithValue}
+          onChange={withValue(v => `hi: ${v}`)} />
       </div>
     );
   }
@@ -45,7 +65,21 @@ describe('mut', () => {
     const state = wrapper.state();
 
     expect(state.mutValue).toEqual('changed');
-  })
+    expect(wrapper.find('[dataMutTest]').text()).toEqual('changed');
+  });
+
+
+  it('transforms a value', () => {
+    const wrapper = mount(makeWrappedComponent());
+
+    wrapper.find('[dataMutTransformInput]').simulate('change', { target: { value: '2.3' } });
+    wrapper.update();
+
+    const state = wrapper.state();
+
+    expect(state.mutTransformValue).toEqual(2);
+    expect(wrapper.find('[dataMutTransformTest]').text()).toEqual('2');
+  });
 });
 
 describe('toggle', () => {
@@ -56,5 +90,19 @@ describe('toggle', () => {
     wrapper.update();
 
     expect(wrapper.state().toggleValue).toEqual(true);
+  });
+});
+
+describe('withValue', () => {
+  it('changes the value', () => {
+    const wrapper = mount(makeWrappedComponent());
+
+    wrapper.find('[dataWithValueInput]').simulate('change', { target: { value: 'someValue' } });
+    wrapper.update();
+
+    const state = wrapper.props().values;
+
+    expect(state.someWithValue).toEqual('hi: someValue');
+    expect(wrapper.find('[dataWithValueTest]').text()).toEqual('hi: someValue');
   });
 });
