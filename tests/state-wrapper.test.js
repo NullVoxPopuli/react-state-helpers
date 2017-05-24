@@ -45,7 +45,7 @@ class TestEverything extends Component {
         <span dataWithValueTest>{someWithValue}</span>
         <input dataWithValueInput type='text'
           value={someWithValue}
-          onChange={withValue(v => `hi: ${v}`)} />
+          onChange={withValue(v => this.setState({ someWithValue: `hi: ${v}` }))} />
       </div>
     );
   }
@@ -100,7 +100,7 @@ describe('withValue', () => {
     wrapper.find('[dataWithValueInput]').simulate('change', { target: { value: 'someValue' } });
     wrapper.update();
 
-    const state = wrapper.props().values;
+    const state = wrapper.state();
 
     expect(state.someWithValue).toEqual('hi: someValue');
     expect(wrapper.find('[dataWithValueTest]').text()).toEqual('hi: someValue');
