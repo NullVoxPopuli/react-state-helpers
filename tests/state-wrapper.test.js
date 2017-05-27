@@ -8,20 +8,15 @@ class TestEverything extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      mutValue: '',
-      toggleValue: false,
-      someWithValue: '',
-      mutTransformValue: ''
-    }
+    this.state = { someWithValue: '', foundValue: '' };
   }
 
   render() {
     const {
-      // state: { mutValue, toggleValue, someWithValue, mutTransformValue },
+      state: { someWithValue, foundValue },
       props: {
         mut, toggle, withValue, findValue, handleSumbit,
-        values: { mutValue, toggleValue, someWithValue, mutTransformValue }
+        values: { mutValue, toggleValue, mutTransformValue }
       }
     } = this;
 
@@ -46,6 +41,12 @@ class TestEverything extends Component {
         <input dataWithValueInput type='text'
           value={someWithValue}
           onChange={withValue(v => this.setState({ someWithValue: `hi: ${v}` }))} />
+
+        {/* findValue */}
+        <span dataFindValueTest>{foundValue}</span>
+        <input dataFindValueInput type='text'
+          value={foundValue}
+          onChange={e => this.setState({ foundValue: `hi: ${findValue(e)}` })} />
       </div>
     );
   }
@@ -100,9 +101,18 @@ describe('withValue', () => {
     wrapper.find('[dataWithValueInput]').simulate('change', { target: { value: 'someValue' } });
     wrapper.update();
 
-    const state = wrapper.state();
-
-    expect(state.someWithValue).toEqual('hi: someValue');
     expect(wrapper.find('[dataWithValueTest]').text()).toEqual('hi: someValue');
+  });
+});
+
+
+describe('findValue', () => {
+  it('is used to change the state', () => {
+    const wrapper = mount(makeWrappedComponent());
+
+    wrapper.find('[dataFindValueInput]').simulate('change', { target: { value: 'aFoundValue' } });
+    wrapper.update();
+
+    expect(wrapper.find('[dataFindValueTest]').text()).toEqual('hi: aFoundValue');
   });
 });
