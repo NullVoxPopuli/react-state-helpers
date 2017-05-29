@@ -9,6 +9,40 @@
 yarn add react-state-helpers
 ```
 
+## Higher Order Component Wrapper
+
+```js
+import React, { Component } from 'react';
+import wrapStateHelpers from 'react-state-helpers';
+
+// login could be a function that takes on object with the keys:
+// userName, and password
+import { login } from 'src/api';
+
+class Example extends Component {
+  render() {
+    const {
+      handleSumbit, mut,
+      values: { userName }
+    } = this.props;
+
+    return (
+      <div>
+        Welcome, { userName }!
+        <form onSubmit={handleSumbit(login)}>
+          <input name='userName' type='text' onChange={mut('userName')}/>
+          <input name='password' type='password' />
+
+          <input type='submit' value='Login' />
+        </form>
+      </div>
+    )
+  }
+}
+
+export default wrapStateHelpers(Example);
+```
+
 ## Mut Usage
 
 ```js
