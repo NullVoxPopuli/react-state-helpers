@@ -6,6 +6,9 @@ module.exports = {
         "import"
     ],
     "rules": {
+      // Don't care about this
+      "import/prefer-default-export": 0,
+
       // I think sans parenthesis around single argument functions looks better
       // http://eslint.org/docs/rules/arrow-parens#as-needed
       "arrow-parens": ["error", "as-needed"],
