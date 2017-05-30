@@ -1,6 +1,6 @@
 {
   "name": "react-state-helpers",
-  "version": "1.5.3",
+  "version": "1.5.5",
   "keywords": [
     "react",
     "component",
@@ -23,7 +23,7 @@
     }
   ],
   "scripts": {
-    "compile": "./node_modules/.bin/babel --out-dir dist/ src/",
+    "compile": "./node_modules/.bin/babel --out-file dist/index.js src/",
     "prepublish": "npm run compile",
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register tests/**/*.test.js"
   },
