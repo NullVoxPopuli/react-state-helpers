@@ -1,6 +1,6 @@
 {
   "name": "react-state-helpers",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "keywords": [
     "react",
     "component",
@@ -8,7 +8,7 @@
     "helper"
   ],
   "description": "component state helpers for react to help reduce boilerplate and to not rely on redux for everything",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": {
     "url": "https://github.com/NullVoxPopuli/react-state-helpers",
     "type": "git"
@@ -23,7 +23,7 @@
     }
   ],
   "scripts": {
-    "compile": "./node_modules/.bin/babel --presets es2015,react --out-file index.js src/",
+    "compile": "./node_modules/.bin/babel --presets es2015,react --out-dir dist/ src/",
     "prepublish": "npm run compile",
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register tests/**/*.test.js"
   },
