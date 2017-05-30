@@ -1,6 +1,6 @@
 {
   "name": "react-state-helpers",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "keywords": [
     "react",
     "component",
@@ -29,7 +29,14 @@
   },
   "license": "MIT",
   "files": [
-    "dist/*"
+    "dist/index.js",
+    "dist/findValue.js",
+    "dist/handleSubmit.js",
+    "dist/mut.js",
+    "dist/state-wrapper.js",
+    "dist/toggle.js",
+    "dist/withValue.js",
+    "dist/helpers/index.js"
   ],
   "devDependencies": {
     "babel-cli": "^6.24.1",
