@@ -6,4 +6,4 @@ ratings:
   - src/**
   - tests/**
 exclude_paths:
-- /index.js
+- dist/**
