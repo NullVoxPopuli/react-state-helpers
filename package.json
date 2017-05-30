@@ -23,7 +23,7 @@
     }
   ],
   "scripts": {
-    "compile": "./node_modules/.bin/babel --presets es2015,react --out-dir dist/ src/",
+    "compile": "./node_modules/.bin/babel --out-dir dist/ src/",
     "prepublish": "npm run compile",
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register tests/**/*.test.js"
   },
