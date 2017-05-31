@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { shallow, mount } from 'enzyme';
 import expect from 'expect';
 
-import { handleSumbit } from '../src/index';
+import { handleSubmit } from '../src/index';
 
 const Actions = {
   submit: expect.createSpy(),
@@ -24,7 +24,7 @@ class FormComponent extends Component{
     const onChange = () => {};
 
     return(
-      <form onSubmit={handleSumbit(Actions.submit)}>
+      <form onSubmit={handleSubmit(Actions.submit)}>
         <input id='testInput' name='testInput' type='text' defaultValue='value' />
         <div>
           <input id='nestedInput' name='nestedInput' type='text' defaultValue='nestedValue' />
@@ -51,7 +51,7 @@ class FormComponent extends Component{
 }
 
 
-describe('handleSumbit', () => {
+describe('handleSubmit', () => {
   describe('default form values', () => {
 
     let wrapper;

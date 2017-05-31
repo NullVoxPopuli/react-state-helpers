@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-exports.handleSumbit = handleSumbit;
+exports.handleSubmit = handleSubmit;
 
-var _helpers = require('./helpers');
+var _index = require('./helpers/index');
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -26,7 +26,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // form.elements is built off the name attribute, so if an input
 // doesn't have a name attribute (like a submit input), it will
 // appear as "": "Submit Text"
-function handleSumbit(func) {
+function handleSubmit(func) {
   return function (e) {
     e.preventDefault();
 
@@ -42,7 +42,7 @@ function handleSumbit(func) {
       // radio buttons must have a value, and therefore we don't
       // care about them if they aren't checked.
       if (!isValueIgnored) {
-        var value = (0, _helpers.valueOfInput)(input);
+        var value = (0, _index.valueOfInput)(input);
 
         values = _extends({}, values, _defineProperty({}, input.name, value));
       }

@@ -3,7 +3,7 @@ import merge from 'deepmerge';
 
 import {
   mutCreator, toggleCreator,
-  findValue, withValue, handleSumbit
+  findValue, withValue, handleSubmit
 } from '../src/index.js';
 
 

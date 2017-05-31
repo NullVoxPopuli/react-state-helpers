@@ -1,4 +1,4 @@
-import { valueOfInput } from './helpers';
+import { valueOfInput } from './helpers/index';
 
 // NOTE: typeof form.elements === 'object'
 //
@@ -14,7 +14,7 @@ import { valueOfInput } from './helpers';
 // form.elements is built off the name attribute, so if an input
 // doesn't have a name attribute (like a submit input), it will
 // appear as "": "Submit Text"
-export function handleSumbit(func) {
+export function handleSubmit(func) {
   return e => {
     e.preventDefault();
 

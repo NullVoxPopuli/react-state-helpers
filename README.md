@@ -22,14 +22,14 @@ import { login } from 'src/api';
 class Example extends Component {
   render() {
     const {
-      handleSumbit, mut,
+      handleSubmit, mut,
       values: { userName }
     } = this.props;
 
     return (
       <div>
         Welcome, { userName }!
-        <form onSubmit={handleSumbit(login)}>
+        <form onSubmit={handleSubmit(login)}>
           <input name='userName' type='text' onChange={mut('userName')}/>
           <input name='password' type='password' />
 
@@ -168,7 +168,7 @@ class Example extends Component {
     const submit = values => login(values.username, values.password);
 
     return(
-      <form onSubmit={handleSumbit(submit)}>
+      <form onSubmit={handleSubmit(submit)}>
         <input name='username' type='text' />
         <input name='password' type='password' />
         <button type='submit'>Login</button>
@@ -204,7 +204,7 @@ export default connect(
    - creates a helper that provides a short-hand for setting a state value.
  - toggleCreator
    - creates a helper that will set a value in the state to its inverse.
- - handleSumbit
+ - handleSubmit
    - creates a helper that will pass in all form values to a callback function.
 
 ## Want to stop using redux-forms?

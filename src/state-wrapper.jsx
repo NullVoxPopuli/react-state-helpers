@@ -4,7 +4,7 @@ import { withValue } from './withValue';
 import { findValue } from './findValue';
 import { mutCreator } from './mut';
 import { toggleCreator } from './toggle';
-import { handleSumbit } from './handleSubmit';
+import { handleSubmit } from './handleSubmit';
 
 // Higher-Order-Component for adding all the functionality of
 // react-state-helpers to a component
@@ -19,7 +19,7 @@ export function stateWrapper(WrappedComponent) {
           toggle: toggleCreator(this),
           withValue,
           findValue,
-          handleSumbit,
+          handleSubmit,
         }
       };
     }

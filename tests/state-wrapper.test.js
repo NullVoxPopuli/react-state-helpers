@@ -15,7 +15,7 @@ class TestEverything extends Component {
     const {
       state: { someWithValue, foundValue },
       props: {
-        mut, toggle, withValue, findValue, handleSumbit,
+        mut, toggle, withValue, findValue, handleSubmit,
         values: { mutValue, toggleValue, mutTransformValue }
       }
     } = this;

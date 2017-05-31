@@ -49,7 +49,7 @@ function stateWrapper(WrappedComponent) {
           toggle: (0, _toggle.toggleCreator)(_this),
           withValue: _withValue.withValue,
           findValue: _findValue.findValue,
-          handleSumbit: _handleSubmit.handleSumbit
+          handleSubmit: _handleSubmit.handleSubmit
         }
       };
       return _this;

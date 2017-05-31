@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.handleSumbit = exports.toggleCreator = exports.mutCreator = exports.findValue = exports.withValue = undefined;
 
 var _withValue = require('./withValue');
 
@@ -43,13 +42,18 @@ Object.defineProperty(exports, 'toggleCreator', {
 
 var _handleSubmit = require('./handleSubmit');
 
-Object.defineProperty(exports, 'handleSumbit', {
+Object.defineProperty(exports, 'handleSubmit', {
   enumerable: true,
   get: function get() {
-    return _handleSubmit.handleSumbit;
+    return _handleSubmit.handleSubmit;
   }
 });
 
 var _stateWrapper = require('./state-wrapper');
 
-exports.default = _stateWrapper.stateWrapper;
+Object.defineProperty(exports, 'default', {
+  enumerable: true,
+  get: function get() {
+    return _stateWrapper.stateWrapper;
+  }
+});
