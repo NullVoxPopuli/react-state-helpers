@@ -14,3 +14,5 @@ function withValue(func) {
     return func(value);
   };
 }
+exports['default'] = module.exports;
+exports.default = module.exports;

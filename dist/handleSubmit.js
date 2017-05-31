@@ -51,3 +51,5 @@ function handleSumbit(func) {
     return func(values);
   };
 }
+exports['default'] = module.exports;
+exports.default = module.exports;

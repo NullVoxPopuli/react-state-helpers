@@ -49,3 +49,5 @@ function propertyToObject(propertyPath, targetValue) {
     return o;
   }, {});
 }
+exports['default'] = module.exports;
+exports.default = module.exports;

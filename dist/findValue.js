@@ -11,3 +11,5 @@ function findValue(e) {
 
   return e;
 }
+exports['default'] = module.exports;
+exports.default = module.exports;

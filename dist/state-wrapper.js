@@ -69,3 +69,5 @@ function stateWrapper(WrappedComponent) {
     return _class;
   }(_react.Component);
 }
+exports['default'] = module.exports;
+exports.default = module.exports;
