@@ -1,6 +1,6 @@
 import { findValue } from './findValue';
 import { updateNestedStateForProperty } from './helpers';
-import doLifeCycle from './LifeCycle';
+import doLifeCycle from './doLifeCycle';
 // --------------------------------
 // using ember-inspired mut helper
 // --------------------------------

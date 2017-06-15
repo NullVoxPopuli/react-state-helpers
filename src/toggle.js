@@ -1,5 +1,5 @@
 import { digIntoState, updateNestedStateForProperty } from './helpers';
-import doLifeCycle from './LifeCycle';
+import doLifeCycle from './doLifeCycle';
 
 export function toggleCreator(context) {
   return (property, opts) => _event => {
