@@ -1,62 +1,77 @@
-export default function doLifeCycle(main, nextValue, opts = {}) {
-  let transform;
-  let beforeUpdate;
-  let afterUpdate;
+class LifeCycle {
 
-  const defaults = {
-    transform: value => value,
-    beforeUpdate: [() => true],
-    afterUpdate: [],
-  };
+  transform = value => value;
+  beforeUpdate = [];
+  afterUpdate = [];
 
-  if (typeof opts === 'function') {
-    transform = opts;
-    ({ beforeUpdate, afterUpdate } = defaults);
-  } else if (typeof opts === 'object') {
-    if (opts.beforeUpdate || opts.afterUpdate) {
-      const options = [...defaults, ...opts];
+  constructor(main, nextValue, opts = {}) {
+    this.main = main;
+    this.nextValue = nextValue;
 
-      transform = options.transform ? options.transform : value => value;
-      beforeUpdate = [() => true].concat(options.beforeUpdate);
-      afterUpdate = [].concat(options.afterUpdate);
-    } else {
-      ({ transform, beforeUpdate, afterUpdate } = defaults);
+    if (typeof opts === 'function') {
+      this.transform = opts;
+    } else if (typeof opts === 'object') {
+      if (opts.beforeUpdate || opts.afterUpdate) {
+        if (opts.transform) this.transform = opts.transform;
+        this.beforeUpdate = this.ensureArray(opts.beforeUpdate);
+        this.afterUpdate = this.ensureArray(opts.afterUpdate);
+      }
+    } else throw new Error('Illegal options supplied to cycle.');
+  }
+
+  doTransform = () => {
+    const { transform, nextValue } = this;
+    return transform(nextValue);
+  }
+
+  doPreUpdate = () => {
+    const { beforeUpdate, nextValue } = this;
+    if (beforeUpdate.length > 0) {
+      return beforeUpdate
+      .map(func => func.call(nextValue))
+      .every(v => v);
     }
-  } else throw new Error('Illegal options supplied to cycle.');
 
-  return run(main, nextValue, transform, beforeUpdate, afterUpdate);
-}
-
-function doTransform(transform, nextValue) {
-  return transform(nextValue);
-}
-
-function doPreUpdate(before, nextValue) {
-  return before
-  .map(func => func.call(nextValue))
-  .every(v => v);
-}
-
-function doPostUpdate(currentValue, after) {
-  after.map(func => func.call(currentValue));
-}
-
-function run(main, nextValue, transform, before, after) {
-  if (
-  !before.every(func => typeof func === 'function') ||
-  !after.every(func => typeof func === 'function')
-  ) {
-    throw new Error('Expected all hooks to be typeof function');
+    return true;
   }
 
-  const transformedValue = doTransform(transform, nextValue);
-
-  let returnValue = nextValue;
-  if (doPreUpdate(before, nextValue)) {
-    main(transformedValue);
-    returnValue = transformedValue;
-    doPostUpdate(returnValue, after);
+  doPostUpdate = () => {
+    this.afterUpdate.map(func => func.call());
   }
 
-  return returnValue;
+  run = () => {
+    const {
+      main,
+      nextValue,
+      beforeUpdate,
+      afterUpdate,
+      doTransform,
+      doPreUpdate,
+      doPostUpdate,
+    } = this;
+
+    if (
+    !beforeUpdate.every(func => typeof func === 'function') ||
+    !afterUpdate.every(func => typeof func === 'function')
+    ) {
+      throw new Error('Expected all hooks to be typeof function');
+    }
+
+    const transformedValue = doTransform();
+
+    let returnValue = nextValue;
+    if (doPreUpdate()) {
+      main(transformedValue);
+      returnValue = transformedValue;
+      doPostUpdate();
+    }
+
+    return returnValue;
+  }
+
+  ensureArray = item => [].concat(item);
+}
+
+export default function doLifeCycle(main, nextValue, opts = {}) {
+  return new LifeCycle(main, nextValue, opts).run();
 }
