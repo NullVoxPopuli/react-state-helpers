@@ -11,8 +11,7 @@ export default function doLifeCycle(main, nextValue, opts = {}) {
 
   if (typeof opts === 'function') {
     transform = opts;
-    beforeUpdate = [() => true];
-    afterUpdate = [];
+    ({ beforeUpdate, afterUpdate } = defaults);
   } else if (typeof opts === 'object') {
     if (opts.beforeUpdate || opts.afterUpdate) {
       const options = [...defaults, ...opts];
@@ -38,7 +37,7 @@ function doPreUpdate(before, nextValue) {
   .every(v => v);
 }
 
-function afterUpdate(currentValue, after) {
+function doPostUpdate(currentValue, after) {
   after.map(func => func.call(currentValue));
 }
 
@@ -56,7 +55,7 @@ function run(main, nextValue, transform, before, after) {
   if (doPreUpdate(before, nextValue)) {
     main(transformedValue);
     returnValue = transformedValue;
-    afterUpdate(returnValue, after);
+    doPostUpdate(returnValue, after);
   }
 
   return returnValue;
