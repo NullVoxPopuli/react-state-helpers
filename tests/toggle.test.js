@@ -59,5 +59,14 @@ describe('toggleCreator', () => {
       expect(result).toEqual(false);
       expect(fake.state.val).toEqual(false);
     });
+
+    it('calls the callback function with the correct value', () => {
+      const fake = new ComponentStub({val: true});
+      const toggle = toggleCreator(fake);
+
+      const callback = (value) => expect(value.toEqual(false));
+
+      toggle('val', callback);
+    });
   });
 });

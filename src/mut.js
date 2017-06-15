@@ -1,5 +1,6 @@
 import { findValue } from './findValue';
 import { updateNestedStateForProperty } from './helpers';
+import doLifeCycle from './LifeCycle';
 // --------------------------------
 // using ember-inspired mut helper
 // --------------------------------
@@ -16,13 +17,11 @@ import { updateNestedStateForProperty } from './helpers';
 //     onChange={mut('property', parseFloat)}
 export function mutCreator(context) {
   // mut => the function called by whatever event
-  return (property, transform) => e => {
-    const isFunction = typeof transform === 'function';
+  return (property, opts) => e => {
     const passedValue = findValue(e);
-    const value = isFunction ? transform(passedValue) : passedValue;
 
-    updateNestedStateForProperty(property, value, context);
+    const updateState = value => updateNestedStateForProperty(property, value, context);
 
-    return value;
+    return doLifeCycle(updateState, passedValue, opts);
   };
 }

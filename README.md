@@ -90,7 +90,7 @@ export default class Example extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { showModal: false };
+    this.state = { showModal: false, validated: false };
 
     // need to create the helper;
     this.toggle = toggleCreator(this);
@@ -99,6 +99,7 @@ export default class Example extends Component {
   render() {
     const {
       toggle,
+      validate,
       state: { showModal }
     } = this;
 
@@ -107,6 +108,14 @@ export default class Example extends Component {
         <Button onClick={toggle('showModal')}>Open</Button>
         <Modal isOpen={showModal}>
           <Button onClick={toggle('showModal')}>{'Cancel'}</Button>
+          {/* Toggle also accepts before and after functions
+              The before function is called with the expected next boolean value.
+                If the before function returns a falsy value, the state will not update.
+              The after function is called with the actual next value. */}
+          <Button onClick={toggle('validated', {
+            before: validate,
+            after: logToConsole
+          })}>Validate!</Button>
         </Modal>
       </div>
     );
