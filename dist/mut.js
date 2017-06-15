@@ -9,6 +9,12 @@ var _findValue = require('./findValue');
 
 var _helpers = require('./helpers');
 
+var _LifeCycle = require('./LifeCycle');
+
+var _LifeCycle2 = _interopRequireDefault(_LifeCycle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // --------------------------------
 // using ember-inspired mut helper
 // --------------------------------
@@ -25,15 +31,15 @@ var _helpers = require('./helpers');
 //     onChange={mut('property', parseFloat)}
 function mutCreator(context) {
   // mut => the function called by whatever event
-  return function (property, transform) {
+  return function (property, opts) {
     return function (e) {
-      var isFunction = typeof transform === 'function';
       var passedValue = (0, _findValue.findValue)(e);
-      var value = isFunction ? transform(passedValue) : passedValue;
 
-      (0, _helpers.updateNestedStateForProperty)(property, value, context);
+      var updateState = function updateState(value) {
+        return (0, _helpers.updateNestedStateForProperty)(property, value, context);
+      };
 
-      return value;
+      return (0, _LifeCycle2.default)(updateState, passedValue, opts);
     };
   };
 }
