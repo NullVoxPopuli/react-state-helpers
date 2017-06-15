@@ -1,5 +1,5 @@
 import { valueOfInput } from './helpers/index';
-
+import doLifeCycle from './doLifeCycle';
 // NOTE: typeof form.elements === 'object'
 //
 // form.elements is an object that acts like an array.
@@ -14,7 +14,7 @@ import { valueOfInput } from './helpers/index';
 // form.elements is built off the name attribute, so if an input
 // doesn't have a name attribute (like a submit input), it will
 // appear as "": "Submit Text"
-export function handleSubmit(func) {
+export function handleSubmit(func, opts) {
   return e => {
     e.preventDefault();
 
@@ -36,6 +36,6 @@ export function handleSubmit(func) {
       }
     }
 
-    return func(values);
+    return doLifeCycle(func, values, opts);
   };
 }
