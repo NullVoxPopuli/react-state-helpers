@@ -8,6 +8,10 @@ class LifeCycle {
     this.main = main;
     this.nextValue = nextValue;
 
+    this.ensureArgs(opts);
+  }
+
+  ensureArgs = opts => {
     if (typeof opts === 'function') {
       this.transform = opts;
     } else if (typeof opts === 'object') {
@@ -19,6 +23,18 @@ class LifeCycle {
     } else throw new Error('Illegal options supplied to cycle.');
   }
 
+  ensureArray = item => [].concat(item);
+
+  ensureUpdatesAreFuncs = () => {
+    const { beforeUpdate, afterUpdate } = this;
+    if (
+      !beforeUpdate.every(func => typeof func === 'function') ||
+      !afterUpdate.every(func => typeof func === 'function')
+    ) {
+      throw new Error('Expected all hooks to be typeof function');
+    }
+  }
+
   doTransform = () => {
     const { transform, nextValue } = this;
     return transform(nextValue);
@@ -28,8 +44,8 @@ class LifeCycle {
     const { beforeUpdate, nextValue } = this;
     if (beforeUpdate.length > 0) {
       return beforeUpdate
-      .map(func => func.call(nextValue))
-      .every(v => v);
+        .map(func => func.call(nextValue))
+        .every(v => v);
     }
 
     return true;
@@ -43,19 +59,12 @@ class LifeCycle {
     const {
       main,
       nextValue,
-      beforeUpdate,
-      afterUpdate,
       doTransform,
       doPreUpdate,
       doPostUpdate,
     } = this;
 
-    if (
-    !beforeUpdate.every(func => typeof func === 'function') ||
-    !afterUpdate.every(func => typeof func === 'function')
-    ) {
-      throw new Error('Expected all hooks to be typeof function');
-    }
+    this.ensureUpdatesAreFuncs();
 
     const transformedValue = doTransform();
 
@@ -68,8 +77,6 @@ class LifeCycle {
 
     return returnValue;
   }
-
-  ensureArray = item => [].concat(item);
 }
 
 export default function doLifeCycle(main, nextValue, opts = {}) {
