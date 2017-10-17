@@ -99,7 +99,7 @@ export default class Example extends Component {
 
 ## Toggle Usage
 
-_Arguments_:
+_Arguments_:  
 `string (string)`: The name of property to be toggled as it appears in the component state.
 
 ```js
