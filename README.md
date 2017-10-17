@@ -62,7 +62,7 @@ export default wrapStateHelpers(Example);
 ## Mut Usage
 
 _Arguments_:
-`string (string)`: The name of the mutating property as it appears in the component state.
+`string (string)`: The name of the mutating property as it appears in the component state.  
 `[function = () => {}] (function)`: A preprocessing function
 
 ```js
