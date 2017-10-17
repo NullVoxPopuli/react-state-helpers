@@ -23,9 +23,12 @@ import { login } from 'src/api';
 
 @wrapStateHelpers
 export default class Example extends Component {
+  state = { userName: 'user' }
+
   render() {
     const {
       handleSubmit, mut,
+      // default state values are copied to this values props.
       values: { userName }
     } = this.props;
 
@@ -50,31 +53,9 @@ If you are on an older version of Javascript you can use the following syntax fo
 import React, { Component } from 'react';
 import wrapStateHelpers from 'react-state-helpers';
 
-// login could be a function that takes on object with the keys:
-// userName, and password
-import { login } from 'src/api';
-
 class Example extends Component {
-  render() {
-    const {
-      handleSubmit, mut,
-      values: { userName }
-    } = this.props;
-
-    return (
-      <div>
-        Welcome, { userName }!
-        <form onSubmit={handleSubmit(login)}>
-          <input name='userName' type='text' onChange={mut('userName')}/>
-          <input name='password' type='password' />
-
-          <input type='submit' value='Login' />
-        </form>
-      </div>
-    )
-  }
+  // ... methods are the same
 }
-
 export default wrapStateHelpers(Example);
 ```
 
@@ -96,8 +77,10 @@ export default class Example extends Component {
   render() {
     // mut is a part of the props that wrapStateHelpers brings in.
     const {
-      props: { mut },
-      state: { someKey, someNumber }
+      props: {
+        mut,
+        values: { someKey, someNumber }
+      }
     } = this;
 
     return (
@@ -130,8 +113,10 @@ export default class Example extends Component {
 
   render() {
     const {
-      props: { toggle },
-      state: { showModal }
+      props: {
+        toggle,
+        values: { showModal }
+      },
     } = this;
 
     return (
