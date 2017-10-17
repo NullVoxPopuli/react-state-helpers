@@ -11,6 +11,8 @@ yarn add react-state-helpers
 
 ## Higher Order Component Wrapper
 
+You can add `react-state-helpers` to any project quickly and easily with the supplied decorator.
+
 ```js
 import React, { Component } from 'react';
 import wrapStateHelpers from 'react-state-helpers';
@@ -19,10 +21,14 @@ import wrapStateHelpers from 'react-state-helpers';
 // userName, and password
 import { login } from 'src/api';
 
-class Example extends Component {
+@wrapStateHelpers
+export default class Example extends Component {
+  state = { userName: 'user' }
+
   render() {
     const {
       handleSubmit, mut,
+      // default state values are copied to this values props.
       values: { userName }
     } = this.props;
 
@@ -39,30 +45,42 @@ class Example extends Component {
     )
   }
 }
+```
 
+If you are on an older version of Javascript you can use the following syntax for the same results...
+
+```js
+import React, { Component } from 'react';
+import wrapStateHelpers from 'react-state-helpers';
+
+class Example extends Component {
+  // ... methods are the same
+}
 export default wrapStateHelpers(Example);
 ```
 
 ## Mut Usage
 
+_Arguments_:
+`string (string)`: The name of the mutating property as it appears in the component state.
+`[function = () => {}] (function)`: A preprocessing function
+
 ```js
 import React, { Component } from 'react';
-import { mutCreator } from 'react-state-helpers';
+import { wrapStateHelpers } from 'react-state-helpers';
 
+@wrapStateHelpers
 export default class Example extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { someKey: '', someNumber: 2 };
-
-    // need to create the helper;
-    this.mut = mutCreator(this);
-  }
+  // Set the default state without a constructor
+  state = { someKey: '', someNumber: 2 }
 
   render() {
+    // mut is a part of the props that wrapStateHelpers brings in.
     const {
-      mut,
-      state: { someKey, someNumber }
+      props: {
+        mut,
+        values: { someKey, someNumber }
+      }
     } = this;
 
     return (
@@ -81,25 +99,24 @@ export default class Example extends Component {
 
 ## Toggle Usage
 
+_Arguments_:
+`string (string)`: The name of property to be toggled as it appears in the component state.
+
 ```js
 import React, { Component } from 'react';
-import { toggleCreator } from 'react-state-helpers';
+import { wrapStateHelpers } from 'react-state-helpers';
 import { Modal, Button } from 'reactstrap'; // external package
 
+@wrapStateHelpers
 export default class Example extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { showModal: false };
-
-    // need to create the helper;
-    this.toggle = toggleCreator(this);
-  }
+  state = { showModal: false }
 
   render() {
     const {
-      toggle,
-      state: { showModal }
+      props: {
+        toggle,
+        values: { showModal }
+      },
     } = this;
 
     return (
@@ -114,56 +131,29 @@ export default class Example extends Component {
 }
 ```
 
-## Shorthand Redux
-
-With using redux as the source of data, the first paramater of `mut` becomes irrelevant.
-
-```js
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { withValue } from 'react-state-helpers';
-
-import * as actions from 'js/actions';
-
-class Example extends Component {
-  static propTypes = {
-    someKey: PropTypes.string
-  }
-
-  render() {
-    const { someKey, setSomeKey } = this.props;
-
-    return (
-      <input
-        type='text'
-        value={someKey}
-        onChange={withValue(setSomeKey)} />
-    );
-  }
-}
-
-export default connect(
-  state => ({
-    someKey: state.somewhere.someKey
-  }),
-  dispatch => ({
-    setSomeKey: bindActionCreators(actions.somewhere.setSomeKey, dispatch)
-  })
-)(Example)
-```
-
 ## HandleSubmit Usage
 
+_Arguments_:
+
+`function (function)`: The handler function for submitting a form.
+
 ```js
 import React, { Component } from 'react';
-import { handleSubmit } from 'react-state-helpers';
+import { wrapStateHelpers } from 'react-state-helpers';
 import * as actions from 'src/actions';
 
+const mapStateToProps = state => state;
+const mapDispatchToProps = dispatch => ({
+  login() {
+    dispatch(actions.login);
+  }
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+@wrapStateHelpers
 class Example extends Component {
   render() {
-    const { login } = this.props;
+    const { login, handleSubmit } = this.props;
 
     const submit = values => login(values.username, values.password);
 
@@ -176,34 +166,75 @@ class Example extends Component {
     );
   }
 }
+```
 
-export default connect(
-  state => ({}),
-  dispatch => ({
-    login() { dispatch(actions.login); }
-  })
-)(Example)
+## Shorthand Redux
+
+With using redux as the source of data, the first paramater of `mut` becomes irrelevant.
+
+_Arguments:_
+
+`function (function)`: A redux action that accepts the value of the input as a parameter
+
+```js
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { wrapStateHelpers } from 'react-state-helpers';
+
+import * as actions from 'js/actions';
+
+const mapStateToProps = state => ({
+  someKey: state.somewhere.someKey
+});
+
+const mapDispatchToProps = dispatch => ({
+  setSomeKey: bindActionCreators(actions.somewhere.setSomeKey, dispatch)
+});
+
+// Chaining decorators is super easy!
+@connect(mapStateToProps, mapDispatchToProps)
+@wrapStateHelpers
+export default class Example extends Component {
+  static propTypes = {
+    someKey: PropTypes.string
+  }
+
+  render() {
+    const { someKey, setSomeKey, withValue } = this.props;
+
+    return (
+      <input
+        type='text'
+        value={someKey}
+        onChange={withValue(setSomeKey)} />
+    );
+  }
+}
 ```
 
 ## Available Functions
 
+These functions can be found in your components props after using `wrapStateHelpers`
+
  - findValue
    - takes an event or value and returns the value.
    - useful, if you want a common interface for handling events.
+     -  ex:
+        ```js
+        handleChange(e) {
+          const value = findValue(e);
+          this.setState({ someKey: value });
+        }
 
-```js
-  handleChange(e) {
-    const value = findValue(e);
-    this.setState({ someKey: value });
-  }
-
-  // in render...
-  <input value={someKey} onChange={handleChange} />
-```
- - mutCreator
-   - creates a helper that provides a short-hand for setting a state value.
- - toggleCreator
-   - creates a helper that will set a value in the state to its inverse.
+        // in render...
+        <input value={someKey} onChange={handleChange} />
+        ```
+ - mut
+   - provides a short-hand for setting a state value.
+ - toggle
+   - set a value in the state to its inverse.
  - handleSubmit
    - creates a helper that will pass in all form values to a callback function.
 
@@ -233,12 +264,12 @@ export default reduxForm({ form: 'formname' })(MyComponent);
 no reliance on redux!
 
 ```js
-import { mutCreator } from 'react-state-helpers';
-// ... in constructor
-this.mut = mutCreator(this);
+import { wrapStateHelpers } from 'react-state-helpers';
+// ... before class declaration
+@wrapStateHelpers
 // ... in render
 const {
-  mut,
+  props: { mut },
   state: { firstName, lastName }
 } = this;
 // ... still in render
@@ -248,6 +279,6 @@ const {
   type='text' />
 <input
   value={lasteName}
-  onChange={mut('lasteName')}
+  onChange={mut('lastName')}
   type='text' />
 ```
