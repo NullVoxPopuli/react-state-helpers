@@ -67,7 +67,7 @@ _Arguments_:
 
 ```js
 import React, { Component } from 'react';
-import { wrapStateHelpers } from 'react-state-helpers';
+import wrapStateHelpers from 'react-state-helpers';
 
 @wrapStateHelpers
 export default class Example extends Component {
@@ -104,7 +104,7 @@ _Arguments_:
 
 ```js
 import React, { Component } from 'react';
-import { wrapStateHelpers } from 'react-state-helpers';
+import wrapStateHelpers from 'react-state-helpers';
 import { Modal, Button } from 'reactstrap'; // external package
 
 @wrapStateHelpers
@@ -139,7 +139,7 @@ _Arguments_:
 
 ```js
 import React, { Component } from 'react';
-import { wrapStateHelpers } from 'react-state-helpers';
+import wrapStateHelpers from 'react-state-helpers';
 import * as actions from 'src/actions';
 
 const mapStateToProps = state => state;
@@ -181,7 +181,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { wrapStateHelpers } from 'react-state-helpers';
+import wrapStateHelpers from 'react-state-helpers';
 
 import * as actions from 'js/actions';
 
@@ -264,7 +264,7 @@ export default reduxForm({ form: 'formname' })(MyComponent);
 no reliance on redux!
 
 ```js
-import { wrapStateHelpers } from 'react-state-helpers';
+import wrapStateHelpers from 'react-state-helpers';
 // ... before class declaration
 @wrapStateHelpers
 // ... in render
