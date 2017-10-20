@@ -143,6 +143,24 @@ describe('withValue - on a checkbox', () => {
     result = wrapper.find(TestEverything).instance().getState().someCheckboxWithValue;
     expect(result).toEqual(true);
   });
+
+  xit('does not return the value if the checkbox is not checked', () => {
+    // I don't think there this can be generalized for everyone's use cases
+    const wrapper = mount(makeWrappedComponent());
+    const selector = '[data-test="WithValueCheckboxInput"]';
+
+    wrapper.find(selector).simulate('change', { target: { checked: false, value: 'a' } });
+    wrapper.update();
+
+    let result = wrapper.find(TestEverything).instance().getState().someCheckboxWithValue;
+    expect(result).toEqual(false);
+
+    wrapper.find(selector).simulate('change', { target: { checked: true, value: 'a' } });
+    wrapper.update();
+
+    result = wrapper.find(TestEverything).instance().getState().someCheckboxWithValue;
+    expect(result).toEqual('a');
+  });
 });
 
 
