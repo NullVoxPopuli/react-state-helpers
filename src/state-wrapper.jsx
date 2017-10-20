@@ -20,8 +20,8 @@ export function stateWrapper(WrappedComponent) {
           withValue,
           findValue,
           handleSubmit,
-          setWrappingState: this.setState.bind(this)
-        }
+          setWrappingState: this.setState.bind(this),
+        },
       };
     }
 
@@ -29,7 +29,7 @@ export function stateWrapper(WrappedComponent) {
       const props = {
         ...this.state.stateHelpers,
         ...this.props,
-        values: this.state
+        values: this.state,
       };
 
       return <WrappedComponent {...props} />;
