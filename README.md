@@ -23,10 +23,15 @@ import { login } from 'src/api';
 
 @wrapStateHelpers
 export default class Example extends Component {
+  componentDidMount() {
+    this.props.setWrappingState({
+      userName: ''
+    });
+  }
+
   render() {
     const {
       handleSubmit, mut,
-      // default value of any 'values' property is undefined
       values: { userName }
     } = this.props;
 

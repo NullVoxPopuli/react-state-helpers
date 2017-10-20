@@ -20,6 +20,7 @@ export function stateWrapper(WrappedComponent) {
           withValue,
           findValue,
           handleSubmit,
+          setWrappingState: this.setState.bind(this)
         }
       };
     }

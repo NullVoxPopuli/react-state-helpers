@@ -25,7 +25,9 @@
   "scripts": {
     "compile": "./node_modules/.bin/babel --out-dir dist/ src/ --modules commonStrict",
     "prepublish": "npm run compile",
-    "test": "./node_modules/.bin/mocha --compilers js:babel-core/register tests/**/*.test.js"
+    "test": "./node_modules/.bin/mocha --compilers js:babel-core/register tests/**/*.test.js",
+    "lint": "eslint src/**/**/*.js*",
+    "lint:fix": "eslint src/**/**/*.js* --fix"
   },
   "license": "MIT",
   "files": [

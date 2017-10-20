@@ -11,6 +11,14 @@ class TestEverything extends Component {
     this.state = { someWithValue: '', foundValue: '', someCheckboxWithValue: false };
   }
 
+  componentDidMount() {
+    this.props.setWrappingState({
+      mutValue: 'initial mut value',
+      toggleValue: false,
+      mutTransformValue: 'initial mut transform value'
+    });
+  }
+
   getState = () => this.state;
 
   render() {
@@ -65,6 +73,17 @@ function makeWrappedComponent() {
   return React.createElement(stateWrapper(TestEverything));
 }
 
+describe('setWrappingState', () => {
+  it('can set multiple properties in componentDidMount', () => {
+    const wrapper = mount(makeWrappedComponent());
+    const props = wrapper.state()
+
+    expect(props.mutValue).toEqual('initial mut value');
+    expect(props.toggleValue).toEqual(false);
+    expect(props.mutTransformValue).toEqual('initial mut transform value');
+  });
+});
+
 describe('mut', () => {
   it('changes a value', () => {
     const wrapper = mount(makeWrappedComponent());
@@ -95,6 +114,8 @@ describe('mut', () => {
 describe('toggle', () => {
   it('inverts the value', () => {
     const wrapper = mount(makeWrappedComponent());
+
+    expect(wrapper.state().toggleValue).toEqual(false);
 
     wrapper.find('[data-test="ToggleButton"]').simulate('click');
     wrapper.update();
