@@ -23,8 +23,6 @@ import { login } from 'src/api';
 
 @wrapStateHelpers
 export default class Example extends Component {
-  state = { userName: 'user' }
-
   render() {
     const {
       handleSubmit, mut,
@@ -71,8 +69,6 @@ import wrapStateHelpers from 'react-state-helpers';
 
 @wrapStateHelpers
 export default class Example extends Component {
-  // Set the default state without a constructor
-  state = { someKey: '', someNumber: 2 }
 
   render() {
     // mut is a part of the props that wrapStateHelpers brings in.
@@ -109,8 +105,6 @@ import { Modal, Button } from 'reactstrap'; // external package
 
 @wrapStateHelpers
 export default class Example extends Component {
-  state = { showModal: false }
-
   render() {
     const {
       props: {
