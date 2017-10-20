@@ -38,7 +38,7 @@
     "dist/state-wrapper.js",
     "dist/toggle.js",
     "dist/withValue.js",
-    "dist/setWrapping.js",
+    "dist/setWrappingState.js",
     "dist/helpers/index.js",
     "dist/helpers/deepLeftEquals.js"
   ],
