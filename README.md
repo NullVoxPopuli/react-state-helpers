@@ -26,7 +26,7 @@ export default class Example extends Component {
   render() {
     const {
       handleSubmit, mut,
-      // default state values are copied to this values props.
+      // default value of any 'values' property is undefined
       values: { userName }
     } = this.props;
 
