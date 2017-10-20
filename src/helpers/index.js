@@ -1,3 +1,5 @@
+export { deepLeftEquals } from './deepLeftEquals';
+
 export function valueOfInput(input) {
   if (input.type === 'checkbox' && !input.value) return input.checked;
   if (input.type === 'radio') return input.value;

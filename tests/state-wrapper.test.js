@@ -69,18 +69,80 @@ class TestEverything extends Component {
   }
 }
 
+class StateAccessible extends Component {}
+
 function makeWrappedComponent() {
   return React.createElement(stateWrapper(TestEverything));
 }
 
-describe('setWrappingState', () => {
-  it('can set multiple properties in componentDidMount', () => {
-    const wrapper = mount(makeWrappedComponent());
-    const props = wrapper.state()
+function mountWithWrapper(component) {
+  return mount(
+    React.createElement(stateWrapper(component))
+  );
+}
 
-    expect(props.mutValue).toEqual('initial mut value');
-    expect(props.toggleValue).toEqual(false);
-    expect(props.mutTransformValue).toEqual('initial mut transform value');
+describe('setWrappingState', () => {
+  describe('in componentDidMount', () => {
+    it('can set multiple properties', () => {
+      const wrapper = mountWithWrapper(class extends Component {
+        componentDidMount() {
+          this.props.setWrappingState({
+            mutValue: 'initial mut value',
+            toggleValue: false,
+            mutTransformValue: 'initial mut transform value'
+          });
+        }
+        render = () => null
+      });
+      const props = wrapper.state()
+
+      expect(props.mutValue).toEqual('initial mut value');
+      expect(props.toggleValue).toEqual(false);
+      expect(props.mutTransformValue).toEqual('initial mut transform value');
+    });
+  })
+
+  describe('in componentWillReceiveProps', () => {
+    it('can set multiple properties', () => {
+      class TC extends StateAccessible {
+        componentWillReceiveProps(nextProps) {
+          nextProps.setWrappingState({ something: nextProps.something });
+        }
+        render = () => null;
+        getState = () => this.state;
+      }
+
+      const wrapper = mountWithWrapper(TC);
+
+      wrapper.setProps({ something: 3 });
+      wrapper.update();
+
+      const result = wrapper.state().something;
+
+      expect(result).toEqual(3);
+    });
+
+    it('does not infinite loop with passing nextProps', () => {
+      class TC extends StateAccessible {
+        componentWillReceiveProps(nextProps) {
+          nextProps.setWrappingState(nextProps);
+        }
+        render = () => null;
+        getState = () => this.state;
+      }
+      const wrapper = mountWithWrapper(TC);
+
+      // setting props should trigger componentWillReceiveProps,
+      // via the wrapping render method's prop-forwarding,
+      // which triggers the sub-component's componentWillReceiveProps,
+      // which in-turn triggers setWrappingState
+      wrapper.setProps({ something: 2 });
+      wrapper.update();
+
+      const result = wrapper.state().something;
+
+      expect(result).toEqual(2);
+    });
   });
 });
 
@@ -165,7 +227,7 @@ describe('withValue - on a checkbox', () => {
     expect(result).toEqual(true);
   });
 
-  xit('does not return the value if the checkbox is not checked', () => {
+  it('does not return the value if the checkbox is not checked', () => {
     // I don't think there this can be generalized for everyone's use cases
     const wrapper = mount(makeWrappedComponent());
     const selector = '[data-test="WithValueCheckboxInput"]';

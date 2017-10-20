@@ -5,6 +5,7 @@ import { findValue } from './findValue';
 import { mutCreator } from './mut';
 import { toggleCreator } from './toggle';
 import { handleSubmit } from './handleSubmit';
+import { setWrappingStateCreator } from './setWrappingState';
 
 // Higher-Order-Component for adding all the functionality of
 // react-state-helpers to a component
@@ -20,7 +21,7 @@ export function stateWrapper(WrappedComponent) {
           withValue,
           findValue,
           handleSubmit,
-          setWrappingState: this.setState.bind(this),
+          setWrappingState: setWrappingStateCreator(this),
         },
       };
     }

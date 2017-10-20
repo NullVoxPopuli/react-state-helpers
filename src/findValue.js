@@ -1,9 +1,16 @@
 export function findValue(e) {
   if (e === undefined || e === null) return null;
 
-  if (e.target) {
-    if (e.target.value || e.target.value === '') return e.target.value;
-    if (e.target.checked !== undefined) return e.target.checked;
+  const target = e.target;
+
+  if (target) {
+    const { checked, value } = target;
+
+    if (checked !== undefined) {
+      return (checked && value) || checked;
+    }
+
+    if (value || value === '') return value;
   }
 
   if (e.value) return e.value;
