@@ -62,7 +62,7 @@ describe('handleSubmit', () => {
       wrapper = mount(<FormComponent />);
       submit = expect.spyOn(Actions, 'submit');
 
-      wrapper.find('button').get(0).click();
+      wrapper.find('form').simulate('submit');
 
       submitArgs = Actions.submit.calls[0].arguments[0];
     });
@@ -117,15 +117,15 @@ describe('handleSubmit', () => {
       wrapper = mount(<FormComponent />);
       submit = expect.spyOn(Actions, 'submit');
 
-      wrapper.find('#testInput').node.value = 'ChangedTestInput';
-      wrapper.find('#nestedInput').node.value = 'ChangedNestedInput';
-      wrapper.find('#testSelect').node.value = 'test2';
-      wrapper.find('#testTextArea').node.value='MutatedTest';
-      wrapper.find('#testCheckBox').node.checked = false;
-      wrapper.find('#testRadio1').node.checked = false;
-      wrapper.find('#testRadio2').node.checked = true;
+      wrapper.find('#testInput').instance().value = 'ChangedTestInput';
+      wrapper.find('#nestedInput').instance().value = 'ChangedNestedInput';
+      wrapper.find('#testSelect').instance().value = 'test2';
+      wrapper.find('#testTextArea').instance().value = 'MutatedTest';
+      wrapper.find('#testCheckBox').instance().checked = false;
+      wrapper.find('#testRadio1').instance().checked = false;
+      wrapper.find('#testRadio2').instance().checked = true;
 
-      wrapper.find('button').get(0).click();
+      wrapper.find('form').simulate('submit');
 
       submitArgs = Actions.submit.calls[0].arguments[0];
     });
