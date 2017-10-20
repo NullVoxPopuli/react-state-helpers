@@ -49,7 +49,8 @@ function stateWrapper(WrappedComponent) {
           toggle: (0, _toggle.toggleCreator)(_this),
           withValue: _withValue.withValue,
           findValue: _findValue.findValue,
-          handleSubmit: _handleSubmit.handleSubmit
+          handleSubmit: _handleSubmit.handleSubmit,
+          setWrappingState: _this.setState.bind(_this)
         }
       };
       return _this;
