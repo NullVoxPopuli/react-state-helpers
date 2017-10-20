@@ -3,6 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _deepLeftEquals = require('./deepLeftEquals');
+
+Object.defineProperty(exports, 'deepLeftEquals', {
+  enumerable: true,
+  get: function get() {
+    return _deepLeftEquals.deepLeftEquals;
+  }
+});
 exports.valueOfInput = valueOfInput;
 exports.digIntoState = digIntoState;
 exports.updateNestedStateForProperty = updateNestedStateForProperty;

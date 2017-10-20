@@ -7,9 +7,18 @@ exports.findValue = findValue;
 function findValue(e) {
   if (e === undefined || e === null) return null;
 
-  if (e.target) {
-    if (e.target.value || e.target.value === '') return e.target.value;
-    if (e.target.checked !== undefined) return e.target.checked;
+  var target = e.target;
+
+  if (target) {
+    var checked = target.checked,
+        value = target.value;
+
+
+    if (checked !== undefined) {
+      return checked && value || checked;
+    }
+
+    if (value || value === '') return value;
   }
 
   if (e.value) return e.value;

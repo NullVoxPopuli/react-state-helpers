@@ -24,6 +24,8 @@ var _toggle = require('./toggle');
 
 var _handleSubmit = require('./handleSubmit');
 
+var _setWrappingState = require('./setWrappingState');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50,7 +52,7 @@ function stateWrapper(WrappedComponent) {
           withValue: _withValue.withValue,
           findValue: _findValue.findValue,
           handleSubmit: _handleSubmit.handleSubmit,
-          setWrappingState: _this.setState.bind(_this)
+          setWrappingState: (0, _setWrappingState.setWrappingStateCreator)(_this)
         }
       };
       return _this;
