@@ -38,7 +38,9 @@
     "dist/state-wrapper.js",
     "dist/toggle.js",
     "dist/withValue.js",
-    "dist/helpers/index.js"
+    "dist/setWrapping.js",
+    "dist/helpers/index.js",
+    "dist/helpers/deepLeftEquals.js"
   ],
   "devDependencies": {
     "babel-cli": "^6.24.1",
