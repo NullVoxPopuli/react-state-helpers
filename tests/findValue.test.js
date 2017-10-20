@@ -8,6 +8,12 @@ describe('findValue', () => {
     expect(result).toEqual('string');
   });
 
+  it('finds the checked status', () => {
+    const result = findValue({ target: { checked: true }})
+
+    expect(result).toEqual(true);
+  });
+
   it('prioritizes value over checked', () => {
     const result = findValue({ target: { value: 4, checked: true }})
 
