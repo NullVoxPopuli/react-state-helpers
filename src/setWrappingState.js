@@ -22,5 +22,5 @@ export function setWrappingStateCreator(context) {
     //
     // NOTE: if setWrappingState does any incrementing,
     //       an infinite loop will still occur
-  }
+  };
 }
