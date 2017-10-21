@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/NullVoxPopuli/react-state-helpers.svg?branch=master)](https://travis-ci.org/NullVoxPopuli/react-state-helpers)
 [![Code Climate](https://codeclimate.com/github/NullVoxPopuli/react-state-helpers/badges/gpa.svg)](https://codeclimate.com/github/NullVoxPopuli/react-state-helpers)
 
-Tired of any of either of these?
+Tired of doing this all the time?:
 
 ```js
 constructor(props) {
