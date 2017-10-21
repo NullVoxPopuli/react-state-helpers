@@ -8,10 +8,11 @@ describe('findValue', () => {
     { expected: '', name: 'value: empty string', e: { target: { value: '' } } },
     { expected: { target: { value: undefined } }, name: 'value: undefined', e: { target: { value: undefined } } },
     { expected: 2, name: 'value: number', e: { target: { value: 2 } } },
-    { expected: true, name: 'checked: boolean', e: { target: { checked: true } } },
-    { expected: false, name: 'checked: boolean', e: { target: { checked: false } } },
-    { expected: 'true', name: 'checked + value: true', e: { target: { checked: true, value: 'true' } } },
-    { expected: false, name: 'checked + value: false', e: { target: { checked: false, value: 'false' } } },
+
+    { expected: true, name: 'checked: boolean', e: { target: { type: 'checkbox', checked: true } } },
+    { expected: false, name: 'checked: boolean', e: { target: { type: 'checkbox', checked: false } } },
+    { expected: 'true', name: 'checked + value: true', e: { target: { type: 'checkbox', checked: true, value: 'true' } } },
+    { expected: false, name: 'checked + value: false', e: { target: { type: 'checkbox', checked: false, value: 'false' } } },
   ]
 
   scenarios.forEach(scenario => {

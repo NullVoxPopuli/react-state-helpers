@@ -4,82 +4,11 @@ import expect from 'expect';
 
 import stateWrapper from '../src/index';
 
-class TestEverything extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { someWithValue: '', foundValue: '', someCheckboxWithValue: false };
-  }
-
-  componentDidMount() {
-    this.props.setWrappingState({
-      mutValue: 'initial mut value',
-      toggleValue: false,
-      mutTransformValue: 'initial mut transform value'
-    });
-  }
-
-  getState = () => this.state;
-
-  render() {
-    const {
-      state: { someWithValue, foundValue, someCheckboxWithValue },
-      props: {
-        mut, toggle, withValue, findValue, handleSubmit,
-        values: { mutValue, toggleValue, mutTransformValue }
-      }
-    } = this;
-
-    return (
-      <div>
-        {/* toggle */}
-        <span data-test="ToggleTest">{toggleValue}</span>
-        <button data-test="ToggleButton" onClick={toggle('toggleValue')}>toggle button</button>
-
-        {/* mut */}
-        <span data-test="MutTest">{mutValue}</span>
-        <input data-test="MutInput" type='text' value={mutValue} onChange={mut('mutValue')} />
-
-        {/* mut with transform */}
-        <span data-test="MutTransformTest">{mutTransformValue}</span>
-        <input data-test="MutTransformInput" type='text'
-          value={mutTransformValue}
-          onChange={mut('mutTransformValue', parseInt)} />
-
-        {/* withValue */}
-        <span data-test="WithValueTest">{someWithValue}</span>
-        <input data-test="WithValueInput" type='text'
-          value={someWithValue}
-          onChange={withValue(v => this.setState({ someWithValue: `hi: ${v}` }))} />
-
-        {/* withValue on a checkbox */}
-        <span data-test="WithValueCheckboxTest">{someCheckboxWithValue}</span>
-        <input data-test="WithValueCheckboxInput" type='checkbox'
-          checked={someCheckboxWithValue}
-          onChange={withValue(v => this.setState({ someCheckboxWithValue: v}))} />
-
-
-        {/* findValue */}
-        <span data-test="FindValueTest">{foundValue}</span>
-        <input data-test="FindValueInput" type='text'
-          value={foundValue}
-          onChange={e => this.setState({ foundValue: `hi: ${findValue(e)}` })} />
-      </div>
-    );
-  }
-}
-
-class StateAccessible extends Component {}
-
-function makeWrappedComponent() {
-  return React.createElement(stateWrapper(TestEverything));
-}
-
-function mountWithWrapper(component) {
-  return mount(
-    React.createElement(stateWrapper(component))
-  );
-}
+import {
+  makeWrappedComponent, mountWithWrapper,
+  change, click, instanceOf,
+  stateFor, propsFor
+} from './support';
 
 describe('setWrappingState', () => {
   describe('in componentDidMount', () => {
@@ -104,7 +33,7 @@ describe('setWrappingState', () => {
 
   describe('in componentWillReceiveProps', () => {
     it('can set multiple properties', () => {
-      class TC extends StateAccessible {
+      class TC extends Component {
         componentWillReceiveProps(nextProps) {
           nextProps.setWrappingState({ something: nextProps.something });
         }
@@ -123,7 +52,7 @@ describe('setWrappingState', () => {
     });
 
     it('does not infinite loop with passing nextProps', () => {
-      class TC extends StateAccessible {
+      class TC extends Component {
         componentWillReceiveProps(nextProps) {
           nextProps.setWrappingState(nextProps);
         }
@@ -147,101 +76,173 @@ describe('setWrappingState', () => {
 });
 
 describe('mut', () => {
-  it('changes a value', () => {
-    const wrapper = mount(makeWrappedComponent());
+  describe('changes the value', () => {
+    class TC extends Component {
+      getProps = () => this.props;
+      render = () => <input type='text' onChange={this.props.mut('mutValue')} />
+    }
 
-    wrapper.find('[data-test="MutInput"]').simulate('change', { target: { value: 'changed' } });
-    wrapper.update();
+    it('in the wrapper', () => {
+      const wrapper = mountWithWrapper(TC);
 
-    const state = wrapper.state();
+      change(wrapper, 'input', { value: 'changed' });
 
-    expect(state.mutValue).toEqual('changed');
-    expect(wrapper.find('[data-test="MutTest"]').text()).toEqual('changed');
+      const state = wrapper.state();
+
+      expect(state.mutValue).toEqual('changed');
+    });
+
+    it('and passes it via values', () => {
+      const wrapper = mountWithWrapper(TC);
+
+      change(wrapper, 'input', { value: 'changed' });
+
+      const props = propsFor(wrapper, TC);
+      expect(props.values.mutValue).toEqual('changed');
+    });
   });
 
+  describe('transforms a value', () => {
+    class TC extends Component {
+      getProps = () => this.props;
+      render = () => <input type='text' onChange={this.props.mut('mutValue', parseInt)} />
+    }
 
-  it('transforms a value', () => {
-    const wrapper = mount(makeWrappedComponent());
+    it('in the wrapper', () => {
+      const wrapper = mountWithWrapper(TC);
 
-    wrapper.find('[data-test="MutTransformInput"]').simulate('change', { target: { value: '2.3' } });
-    wrapper.update();
+      change(wrapper, 'input', { value: '2.3' });
 
-    const state = wrapper.state();
+      expect(wrapper.state().mutValue).toEqual(2);
+    });
 
-    expect(state.mutTransformValue).toEqual(2);
-    expect(wrapper.find('[data-test="MutTransformTest"]').text()).toEqual('2');
+    it('and passes it via values', () => {
+      const wrapper = mountWithWrapper(TC);
+
+      change(wrapper, 'input', { value: '2.3' });
+
+      expect(
+        propsFor(wrapper, TC).values.mutValue
+      ).toEqual(2);
+    });
   });
 });
 
 describe('toggle', () => {
-  it('inverts the value', () => {
-    const wrapper = mount(makeWrappedComponent());
+  describe('inverts the value', () => {
+    class TC extends Component {
+      getProps = () => this.props;
+      render() {
+        const { toggle, values: { toggled} } = this.props;
+        return <button onClick={toggle('toggled')}>button</button>;
+      }
+    }
 
-    expect(wrapper.state().toggleValue).toEqual(false);
+    it('initializes to undefined', () => {
+      const wrapper = mountWithWrapper(TC);
 
-    wrapper.find('[data-test="ToggleButton"]').simulate('click');
-    wrapper.update();
+      expect(wrapper.state().toggled).toEqual(undefined);
+    })
 
-    expect(wrapper.state().toggleValue).toEqual(true);
+    it('in the wrapper', () => {
+      const wrapper = mountWithWrapper(TC);
+
+      click(wrapper, 'button');
+
+      expect(wrapper.state().toggled).toEqual(true);
+    });
+
+    it('and passes it via values', () => {
+      const wrapper = mountWithWrapper(TC);
+
+      click(wrapper, 'button');
+
+      expect(propsFor(wrapper, TC).values.toggled).toEqual(true);
+    })
   });
 });
 
 describe('withValue', () => {
-  it('changes the value', () => {
-    const wrapper = mount(makeWrappedComponent());
+  class TC extends Component {
+    getProps = () => this.props;
+    getState = () => this.state;
+    render() {
+      const { withValue } = this.props;
 
-    wrapper.find('[data-test="WithValueInput"]').simulate('change', { target: { value: 'someValue' } });
-    wrapper.update();
+      return <input
+        type='text'
+        onChange={withValue(v => this.setState({ someValue: `hi ${v}` }))}
+      />
+    }
+  }
 
-    expect(wrapper.find('[data-test="WithValueTest"]').text()).toEqual('hi: someValue');
+  it('in the wrapper', () => {
+    const wrapper = mountWithWrapper(TC);
+
+    change(wrapper, 'input', { value: 'something' });
+
+    expect(stateFor(wrapper, TC).someValue).toEqual('hi something');
+  });
+
+  it('and passes it via values', () => {
+    const wrapper = mountWithWrapper(TC);
+
+    change(wrapper, 'input', { value: 'something' });
+
+    expect(stateFor(wrapper, TC).someValue).toEqual('hi something');
   });
 });
 
 describe('withValue - on a checkbox', () => {
+  class TC extends Component {
+    getProps = () => this.props;
+    getState = () => this.state;
+    render() {
+      const { withValue, values: { someValue } } = this.props;
+
+      return <input
+        type='checkbox'
+        checked={someValue}
+        onChange={withValue(v => this.setState({ someValue: v }))}
+      />
+    }
+  }
+
   it('changes the value', () => {
-    const wrapper = mount(makeWrappedComponent());
+    const wrapper = mountWithWrapper(TC);
 
-    wrapper.find('[data-test="WithValueCheckboxInput"]').simulate('change', { target: { checked: true } });
-    wrapper.update();
+    change(wrapper, 'input', { type: 'checkbox', checked: true });
 
-    const result = wrapper.find(TestEverything).instance().getState().someCheckboxWithValue;
+    const result = stateFor(wrapper, TC).someValue;
     expect(result).toEqual(true);
   });
 
   it('toggles the value', () => {
-    const wrapper = mount(makeWrappedComponent());
-    const selector = '[data-test="WithValueCheckboxInput"]';
+    const wrapper = mountWithWrapper(TC);
 
-    wrapper.find(selector).simulate('change', { target: { checked: true } });
-    wrapper.update();
-    wrapper.find(selector).simulate('change', { target: { checked: false } });
-    wrapper.update();
+    change(wrapper, 'input', { type: 'checkbox', checked: true });
+    change(wrapper, 'input', { type: 'checkbox', checked: false });
 
-    let result = wrapper.find(TestEverything).instance().getState().someCheckboxWithValue;
+    let result = stateFor(wrapper, TC).someValue;
     expect(result).toEqual(false);
 
-    wrapper.find(selector).simulate('change', { target: { checked: true } });
-    wrapper.update();
+    change(wrapper, 'input', { type: 'checkbox', checked: true });
 
-    result = wrapper.find(TestEverything).instance().getState().someCheckboxWithValue;
+    result = stateFor(wrapper, TC).someValue;
     expect(result).toEqual(true);
   });
 
   it('does not return the value if the checkbox is not checked', () => {
-    // I don't think there this can be generalized for everyone's use cases
-    const wrapper = mount(makeWrappedComponent());
-    const selector = '[data-test="WithValueCheckboxInput"]';
+    const wrapper = mountWithWrapper(TC);
 
-    wrapper.find(selector).simulate('change', { target: { checked: false, value: 'a' } });
-    wrapper.update();
+    change(wrapper, 'input', { type: 'checkbox', checked: false, value: 'a' });
 
-    let result = wrapper.find(TestEverything).instance().getState().someCheckboxWithValue;
+    let result = stateFor(wrapper, TC).someValue;
     expect(result).toEqual(false);
 
-    wrapper.find(selector).simulate('change', { target: { checked: true, value: 'a' } });
-    wrapper.update();
+    change(wrapper, 'input', { type: 'checkbox', checked: true, value: 'a' });
 
-    result = wrapper.find(TestEverything).instance().getState().someCheckboxWithValue;
+    result = stateFor(wrapper, TC).someValue;
     expect(result).toEqual('a');
   });
 });
