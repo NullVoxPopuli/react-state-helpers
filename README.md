@@ -3,6 +3,26 @@
 [![Build Status](https://travis-ci.org/NullVoxPopuli/react-state-helpers.svg?branch=master)](https://travis-ci.org/NullVoxPopuli/react-state-helpers)
 [![Code Climate](https://codeclimate.com/github/NullVoxPopuli/react-state-helpers/badges/gpa.svg)](https://codeclimate.com/github/NullVoxPopuli/react-state-helpers)
 
+Tired of any of either of these?
+
+```js
+constructor(props) {
+  super(props)
+  
+  this.handleChange = this.handleChange.bind(this);
+}
+
+handleFirstNameChange(e) {
+  this.setState({ firstName: e.target.value });
+}
+
+toggleCheckbox() {
+  this.setState({ showModal: this.state.showModal });
+} 
+```
+
+Now you don't need all that boilerplace. This package abstracts the monotony of input/button event handling.
+
 ## Installation
 
 ```bash
