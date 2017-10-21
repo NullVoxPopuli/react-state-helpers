@@ -7,7 +7,15 @@ export function findValue(e) {
     const { checked, value } = target;
 
     if (checked !== undefined) {
-      return (checked && value) || checked;
+      const valueEmpty = (
+        value === null ||
+        value === undefined ||
+        value === ''
+      );
+
+      return (
+        checked && !valueEmpty && value
+      ) || checked;
     }
 
     if (value || value === '') return value;

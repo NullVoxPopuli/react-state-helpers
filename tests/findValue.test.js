@@ -2,21 +2,25 @@ import expect from 'expect';
 import { findValue } from '../src/index';
 
 describe('findValue', () => {
-  it('finds the value', () => {
-    const result = findValue({ target: { value: 'string' }})
+  const scenarios = [
+    { expected: 'string', name: 'value: string', e: { target: { value: 'string' } } },
+    { expected: 'a', name: 'value: small string', e: { target: { value: 'a' } } },
+    { expected: '', name: 'value: empty string', e: { target: { value: '' } } },
+    { expected: { target: { value: undefined } }, name: 'value: undefined', e: { target: { value: undefined } } },
+    { expected: 2, name: 'value: number', e: { target: { value: 2 } } },
+    { expected: true, name: 'checked: boolean', e: { target: { checked: true } } },
+    { expected: false, name: 'checked: boolean', e: { target: { checked: false } } },
+    { expected: 'true', name: 'checked + value: true', e: { target: { checked: true, value: 'true' } } },
+    { expected: false, name: 'checked + value: false', e: { target: { checked: false, value: 'false' } } },
+  ]
 
-    expect(result).toEqual('string');
-  });
+  scenarios.forEach(scenario => {
+    const { e, expected, name } = scenario;
 
-  it('finds the checked status', () => {
-    const result = findValue({ target: { checked: true }})
+    it(`${name} is ${expected}`, () => {
+      const result = findValue(e);
 
-    expect(result).toEqual(true);
-  });
-
-  it('prioritizes value over checked', () => {
-    const result = findValue({ target: { value: 4, checked: true }})
-
-    expect(result).toEqual(4);
+      expect(result).toEqual(expected);
+    });
   });
 });
