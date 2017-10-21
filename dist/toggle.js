@@ -11,6 +11,7 @@ function toggleCreator(context) {
   return function (property) {
     return function (_event) {
       var value = !(0, _helpers.digIntoState)(property, context.state);
+
       (0, _helpers.updateNestedStateForProperty)(property, value, context);
 
       return value;
