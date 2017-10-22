@@ -10,6 +10,7 @@ constructor(props) {
   super(props)
   
   this.handleChange = this.handleChange.bind(this);
+  this.toggleCheckbox = this.toggleCheckbox.bind(this);
 }
 
 handleFirstNameChange(e) {
