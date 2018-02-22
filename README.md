@@ -22,7 +22,7 @@ toggleCheckbox() {
 } 
 ```
 
-Now you don't need all that boilerplace. This package abstracts the monotony of input/button event handling.
+Now you don't need all that boilerplate. This package abstracts the monotony of input/button event handling.
 
 ## Installation
 
